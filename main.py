@@ -1,10 +1,10 @@
-# Este es el archivo
 """main.py - Punto de entrada del simulador de SO (consola de comandos).
 
 Esqueleto (T2.1): lee una linea, la tokeniza e imprime los tokens.
 Mas adelante aqui se conectan el parser (T3.9) y el despachador (T4.1).
 """
 import os
+import sys
 
 PROMPT = "simulador> "
 
@@ -61,7 +61,32 @@ def ejecutar_linea(linea):
     return True
 
 
+def ejecutar_script(ruta):
+    """Ejecuta los comandos de un archivo, uno por linea (T4.3).
+    Ignora lineas vacias y las que empiezan con #. Ante un error sigue con la
+    siguiente linea; 'salir' dentro del script lo termina."""
+    try:
+        with open(ruta, encoding="utf-8-sig") as f:   # utf-8-sig tolera el BOM de Windows
+            lineas = f.readlines()
+    except OSError as e:
+        print(f"[ERROR] No se pudo abrir el script '{ruta}': {e.strerror}")
+        return
+    for linea in lineas:
+        texto = linea.strip()
+        if not texto or texto.startswith("#"):
+            continue
+        print(PROMPT + texto)                 # muestra el comando como si se escribiera
+        if not ejecutar_linea(texto):
+            break
+
+
 def main():
+    if len(sys.argv) >= 2 and sys.argv[1] == "--script":
+        if len(sys.argv) < 3:
+            print("[ERROR] Uso: python main.py --script archivo")
+        else:
+            ejecutar_script(sys.argv[2])
+        return
     print("Simulador de Sistema Operativo. Escribe 'salir' para terminar.")
     while True:
         try:
