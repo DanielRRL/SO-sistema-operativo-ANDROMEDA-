@@ -82,11 +82,12 @@ Responsable: B.
 | `PALABRAS` | `tuple[str, ...]` | Palabras reservadas del lenguaje. |
 | `RESERVADAS` | `dict[str, str]` | Mapa palabra en minusculas -> tipo de token. |
 | `TERMINALES` | `dict[str, DefinicionToken]` | Tabla completa usada por `ayuda` y el lexer. |
+| `SIMBOLOS` | `dict[str, str]` | Mapa de símbolos a tipo de token; actualmente `=` -> `IGUAL`. |
 | `buscar_definicion` | `buscar_definicion(palabra: str) -> DefinicionToken \| None` | Definicion de una palabra, o `None`. |
 | `listar_definiciones` | `listar_definiciones() -> list[DefinicionToken]` | Todas las definiciones registradas. |
 
-Stub T1.3: las constantes quedan vacias y las funciones devuelven `None` o una
-lista vacia. La tabla completa se carga en T2.3.
+La tabla se carga desde `tokens.py`: 36 palabras reservadas y las clases
+`ID`, `NOMBRE_ARCHIVO`, `NUMERO`, `CADENA`, `IGUAL`, `FIN` y `ERROR`.
 
 ## 4. `lexer.py`
 
@@ -94,16 +95,13 @@ Responsable: B.
 
 | Simbolo | Firma | Devuelve o uso |
 |---|---|---|
-| `Token` | `@dataclass(frozen=True)` con `tipo`, `lexema`, `columna` | Token reconocido por el lexer. |
+| `Token` | `@dataclass(frozen=True)` con `tipo`, `lexema`, `linea`, `columna` | Token reconocido por el lexer. |
 | `tokenizar` | `tokenizar(linea: str) -> list[Token]` | Lista de tokens, siempre terminada en `FIN`. |
 
-Stub T1.3: separa por espacios, consulta `RESERVADAS` si ya tiene datos y
-genera tokens `PALABRA` o el tipo reservado correspondiente. Si no hay palabras
-reservadas cargadas, todos los lexemas no vacios son `PALABRA`. Agrega
-`Token("FIN", "", len(linea) + 1)`.
-
-La implementacion real con expresiones regulares, cadenas, nombres de archivo,
-numeros y errores con columna corresponde a T3.5.
+Implementado en T3.5: reconoce palabras reservadas, identificadores, nombres de
+archivo, numeros, cadenas con escapes, `=` y comentarios. Mantiene linea y
+columna, agrega `FIN` al final y emite `Token("ERROR", ...)` para caracteres
+invalidos o cadenas sin cerrar sin detener el analisis.
 
 ## 5. `parser.py`
 
@@ -365,8 +363,10 @@ Responsable: C. Ya implementado en T2.1; no se modifica en T1.3.
 | Datos | Los stubs devuelven listas vacias, `None`, valores por defecto o datos falsos documentados. |
 | Errores | Solo se lanzan `ValueError` en validaciones simples del contrato. |
 | Efectos secundarios | No se crean archivos, no se reserva memoria real, no se lanzan hilos ni se planifica de verdad. |
-| Consola | `main.py` sigue funcionando porque `lexer.tokenizar` mantiene un tokenizador falso. |
+| Consola | `main.py` sigue funcionando con el lexer real y el campo `lexema`. |
 | Reemplazo | Cada stub se sustituye en su tarea de implementacion de la fase 3 o 4. |
+
+`tokens.py` y `lexer.py` ya no son stubs: se implementaron y probaron en T3.5.
 
 ## 16. Verificacion de T1.3
 

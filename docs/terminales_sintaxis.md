@@ -7,6 +7,11 @@ Responsable: Persona B (Lexer, memoria y archivos)
 Fase 1 - Diseño  
 Propuesta para cerrar con el equipo
 
+> **Nota de integración:** Este documento es una propuesta de T1.1. La sintaxis
+> canónica para la integración es la de T1.2, documentada en
+> `docs/firmas_modulos.md`: `crear proceso ...`, `concurrencia`, `memoria ...`,
+> entre otros comandos.
+
 ## 1. Convenciones
 
 - Python 3.10 o superior.
