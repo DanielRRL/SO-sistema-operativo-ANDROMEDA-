@@ -1,24 +1,38 @@
-"""Cola FIFO de mensajes. Stub temporal de T1.3."""
+"""Cola FIFO de mensajes del simulador (T3.10).
+
+Usa queue.Queue de la biblioteca estandar: es segura entre hilos, asi que un
+hilo puede enviar mensajes mientras otro los recibe sin necesidad de un Lock
+propio. FIFO significa que el primer mensaje que entra es el primero que sale.
+"""
+
+import queue
+
+# Una sola cola para todo el simulador (estado del modulo).
+_cola: "queue.Queue[str]" = queue.Queue()
 
 
 def enviar(texto: str) -> None:
-    """Agrega un mensaje al final de la cola.
-
-    Stub T1.3: la cola real corresponde a T3.10.
-    """
-    return None
+    """Agrega un mensaje al final de la cola."""
+    _cola.put(texto)
 
 
 def recibir() -> str | None:
-    """Devuelve el mensaje mas antiguo, o None si no hay."""
-    return None
+    """Saca y devuelve el mensaje mas antiguo, o None si la cola esta vacia.
+
+    No bloquea: si no hay mensajes responde de inmediato con None.
+    """
+    try:
+        return _cola.get_nowait()
+    except queue.Empty:
+        return None
 
 
 def cantidad() -> int:
     """Devuelve la cantidad de mensajes pendientes."""
-    return 0
+    return _cola.qsize()
 
 
 def limpiar() -> None:
     """Vacia la cola de mensajes."""
-    return None
+    while recibir() is not None:
+        pass

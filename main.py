@@ -3,6 +3,7 @@
 Esqueleto (T2.1): lee una linea, la tokeniza e imprime los tokens.
 Mas adelante aqui se conectan el parser (T3.9) y el despachador (T4.1).
 """
+from parser import parsear, ErrorSintaxis
 import os
 import sys
 
@@ -45,19 +46,28 @@ def mostrar_tokens(tokens):
 def ejecutar_linea(linea):
     """Procesa una linea. Devuelve False si hay que terminar el programa."""
     linea = linea.strip()
-    if not linea:                         # linea vacia: no hace nada
+    if not linea:
         return True
 
-    primera = linea.split()[0].lower()
-    if primera == "salir":
+    try:
+        orden = parsear(tokenizar(linea))
+    except ErrorSintaxis as e:
+        print(f"[ERROR] {e}")
+        return True
+
+    if orden.comando == "":              # linea vacia o solo comentario
+        return True
+    if orden.comando == "salir":
         print("[OK] Hasta luego.")
         return False
-    if primera == "limpiar":
+    if orden.comando == "limpiar":
         limpiar_pantalla()
         return True
+    if orden.comando == "tokens":
+        mostrar_tokens(tokenizar(linea[len("tokens"):]))
+        return True
 
-    # TODO (T3.9 y T4.1): tokens -> parsear(tokens) -> despachar(orden)
-    mostrar_tokens(tokenizar(linea))
+    print(orden)        # temporal, hasta T4.1: print(despachar(orden))
     return True
 
 
