@@ -62,6 +62,36 @@ python3 main.py --script pruebas/demo.txt
 - Permitir espacios adicionales entre tokens.
 - Ante un comando mal escrito, responder con el uso correcto.
 
+### Ejemplos de `ayuda` y `tokens`
+
+Inicia el simulador con `python3 main.py` y escribe los comandos en el prompt
+`simulador> `:
+
+```text
+simulador> ayuda
+```
+
+Muestra los comandos principales disponibles. Para consultar la descripción y
+un ejemplo de un comando específico:
+
+```text
+simulador> ayuda planificar
+```
+
+El comando `tokens`, sin argumentos, muestra la tabla de terminales que reconoce
+el lexer. También puedes escribir texto después de `tokens` para ver cómo se
+clasifican sus elementos:
+
+```text
+simulador> tokens crear proceso @x
+```
+
+La salida muestra el tipo, el lexema y su posición. Los caracteres no
+reconocidos aparecen con el tipo `ERROR`. Usa `salir` para cerrar el simulador.
+
+> En esta etapa, `ayuda` y `tokens` están conectados a la consola. Los demás
+> comandos funcionales se completarán durante la integración del despachador.
+
 ### Mensajes
 
 - Usar `[OK]` al inicio de cada mensaje de éxito.

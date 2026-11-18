@@ -1,9 +1,10 @@
-"""Gestion de memoria simulada. Stub temporal de T1.3."""
+"""Gestion de memoria simulada del sistema operativo."""
 
 from dataclasses import dataclass, field
 
 
 CAPACIDAD_TOTAL = 1024
+_asignaciones: dict[int, int] = {}
 
 
 @dataclass(frozen=True)
@@ -17,28 +18,39 @@ class EstadoMemoria:
 
 
 def reservar(pid: int, cantidad: int) -> bool:
-    """Simula una reserva exitosa.
+    """Reserva memoria para un proceso si hay capacidad disponible."""
+    if not isinstance(pid, int) or isinstance(pid, bool) or pid <= 0:
+        raise ValueError("El pid debe ser un entero positivo.")
+    if not isinstance(cantidad, int) or isinstance(cantidad, bool) or cantidad <= 0:
+        raise ValueError("La cantidad de memoria debe ser un entero positivo.")
+    if pid in _asignaciones:
+        return False
 
-    Stub T1.3: la validacion real de capacidad corresponde a T3.7.
-    """
+    usada = sum(_asignaciones.values())
+    if cantidad > CAPACIDAD_TOTAL - usada:
+        return False
+
+    _asignaciones[pid] = cantidad
     return True
 
 
 def liberar(pid: int) -> int:
-    """Simula la liberacion de memoria de un proceso."""
-    return 0
+    """Libera la memoria de un proceso y devuelve los MB liberados."""
+    return _asignaciones.pop(pid, 0)
 
 
 def estado_memoria() -> EstadoMemoria:
-    """Devuelve la memoria totalmente libre."""
+    """Devuelve una fotografia del uso y las asignaciones actuales."""
+    asignaciones = _asignaciones.copy()
+    usada = sum(asignaciones.values())
     return EstadoMemoria(
         total=CAPACIDAD_TOTAL,
-        usada=0,
-        libre=CAPACIDAD_TOTAL,
-        asignaciones={},
+        usada=usada,
+        libre=CAPACIDAD_TOTAL - usada,
+        asignaciones=asignaciones,
     )
 
 
 def reiniciar_memoria() -> None:
-    """Deja la memoria como al inicio."""
-    return None
+    """Deja la memoria simulada como al inicio."""
+    _asignaciones.clear()

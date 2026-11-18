@@ -1,8 +1,8 @@
 # Este es el archivo
 """main.py - Punto de entrada del simulador de SO (consola de comandos).
 
-Esqueleto (T2.1): lee una linea, la tokeniza e imprime los tokens.
-Mas adelante aqui se conectan el parser (T3.9) y el despachador (T4.1).
+Esqueleto (T2.1): mantiene el bucle de entrada. T3.6 conecta temporalmente
+los comandos ayuda y tokens; los demas se integran en T4.1.
 """
 import os
 
@@ -56,7 +56,17 @@ def ejecutar_linea(linea):
         limpiar_pantalla()
         return True
 
-    # TODO (T3.9 y T4.1): tokens -> parsear(tokens) -> despachar(orden)
+    if primera in {"ayuda", "tokens"}:
+        from consola import despachar
+        from parser import parsear
+
+        try:
+            print(despachar(parsear(tokenizar(linea))))
+        except ValueError as error:
+            print(f"[ERROR] {error}")
+        return True
+
+    # TODO (T3.9 y T4.1): conectar los demas comandos con parser y despachador.
     mostrar_tokens(tokenizar(linea))
     return True
 
