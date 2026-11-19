@@ -201,7 +201,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Salida:** `ResultadoPlanificacion` con Gantt, tiempos y promedios.
 - **Reglas:** no muta procesos; solo considera `LISTO`; desempata por `pid`.
 - **Referencia:** [`docs/pseudocodigo_planificadores.md`](./pseudocodigo_planificadores.md).
-- **Estado:** implementado en T3.2 (FCFS/SJF) y T3.3 (Round Robin).
+- **Estado:** implementado en T3.2 (FCFS/SJF) y T3.3 (Round Robin), con
+  pruebas de ejemplo y casos borde en T5.2.
 
 ### 5.8 `estadisticas.py`
 
@@ -259,6 +260,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - `pruebas/test_integracion_memoria.py`: cubre la integración memoria-procesos.
 - `pruebas/test_planificador.py`: cubre FCFS, SJF y Round Robin.
 - `pruebas/test_estadisticas.py`: cubre promedios y formato.
+- `pruebas/test_algoritmos_borde.py`: cubre un proceso, CPU ociosa, quantum 1
+  y otros bordes (T5.2).
 - `pruebas/demo.txt`: guion de demostración; la versión completa está en
   `persona-C` (T4.3).
 - `docs/`: contrato, firmas, terminales, pseudocódigo, diagramas y este
@@ -303,7 +306,7 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 
 ## 8. Estado actual y pendientes
 
-### 8.1 Disponible en `persona-a`
+### 8.1 Disponible en `main`
 
 - `tokens.py` y `lexer.py` implementados y probados.
 - `consola.py` implementa `ayuda` y `tokens` (T3.6).
@@ -312,11 +315,13 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 - `procesos.py` implementado con ciclo de vida y memoria (T3.1).
 - Integración memoria-procesos validada con reserva, rechazo y liberación (T4.2).
 - `planificador.py` implementado con FCFS, SJF y Round Robin (T3.2/T3.3).
+- Casos borde de planificación cubiertos: un proceso, CPU ociosa y quantum 1
+  (T5.2).
 - `estadisticas.py` implementado con promedios y tabla (T3.4).
 - `hilos_sync.py` implementado con hilos reales.
 - Diagramas de arquitectura y flujo de consola de T1.4.
 - Contrato T1.2, firmas T1.3, terminales T1.1 y pseudocódigo T1.5.
-- 99 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
+- 107 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
   planificadores, estadísticas, ayuda y tokens.
 
 ### 8.2 Pendiente de integración
@@ -349,10 +354,12 @@ python3 main.py
 
 Validaciones realizadas sobre `persona-a`:
 
-- 99 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
+- 107 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
   planificadores, estadísticas, ayuda y tokens: correctas.
 - Integración memoria-procesos validada: reserva, rechazo por capacidad y
   liberación al finalizar.
+- Casos borde de planificación verificados: un proceso, CPU ociosa, quantum 1,
+  quantum mayor que la CPU y llegada al borde del quantum.
 - Importación de todos los módulos: correcta.
 - Consola con `ayuda planificar`, `tokens crear proceso editor llegada=0` y
   `salir`: correcta.

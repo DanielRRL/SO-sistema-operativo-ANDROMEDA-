@@ -448,9 +448,8 @@ Los valores coinciden con los ejemplos verificados de `docs/contrato_proceso.md`
 ## 9. Estado de implementación
 
 Este documento es la referencia de diseño para `planificador.py`. FCFS, SJF y
-Round Robin están implementados en la rama `persona-a` (T3.2 y T3.3), con
-pruebas para P1–P4, quantum configurable y casos límite. La rama `main` los
-recibe al fusionar `persona-a`.
+Round Robin están implementados y cubiertos por pruebas de ejemplo y casos borde
+(T5.2): un solo proceso, CPU ociosa, quantum 1 y quantum mayor que la CPU.
 
 La prueba manual con P1–P4 se contrastó con `docs/contrato_proceso.md`; los
 Gantt y promedios de la sección 6 coinciden con el contrato.

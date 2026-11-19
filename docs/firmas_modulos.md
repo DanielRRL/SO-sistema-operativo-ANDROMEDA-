@@ -225,7 +225,7 @@ class ResultadoPlanificacion:
 Implementado en T3.2 y T3.3: FCFS, SJF no expulsivo y Round Robin calculan
 Gantt, tiempos y promedios; no mutan los procesos y solo consideran los que
 estan en estado `LISTO`. Round Robin acepta quantum configurable y usa 3 por
-defecto.
+defecto. Las pruebas de ejemplo y casos borde estan en T5.2.
 
 ## 9. `estadisticas.py`
 
