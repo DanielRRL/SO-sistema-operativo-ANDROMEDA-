@@ -4,7 +4,7 @@
 - **Fase:** 1. Diseño
 - **Responsable:** A
 - **Depende de:** T1.2
-- **Estado:** v1
+- **Estado:** v1 validado
 - **Requisitos:** Python 3.10 o superior, solo biblioteca estándar.
 
 Este documento define el pseudocódigo y el diagrama de flujo de FCFS, SJF no
@@ -444,3 +444,13 @@ Los valores coinciden con los ejemplos verificados de `docs/contrato_proceso.md`
 - [x] Promedios de retorno y espera verificados a mano.
 - [x] Casos límite documentados.
 - [x] Contrato T1.2 respetado.
+
+## 9. Estado de implementación
+
+Este documento es la referencia de diseño para `planificador.py`. En `main`,
+`planificador.py` todavía conserva los stubs de T1.3; la implementación real
+corresponde a T3.2 (FCFS y SJF) y T3.3 (Round Robin). Las pruebas de los
+algoritmos se agregarán en T5.2.
+
+La prueba manual con P1–P4 se contrastó con `docs/contrato_proceso.md`; los
+Gantt y promedios de la sección 6 coinciden con el contrato.
