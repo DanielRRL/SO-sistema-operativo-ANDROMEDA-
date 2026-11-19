@@ -171,13 +171,13 @@ class Proceso:
 | `consultar_proceso` | `consultar_proceso(pid: int) -> Proceso \| None` | Proceso con ese pid, o `None`. |
 | `finalizar_proceso` | `finalizar_proceso(pid: int) -> Proceso \| None` | Proceso finalizado, o `None` si no existe. |
 | `cargar_ejemplo` | `cargar_ejemplo() -> list[Proceso]` | Los cuatro procesos verificados P1-P4 en estado `LISTO`. |
+| `reiniciar_procesos` | `reiniciar_procesos() -> None` | Vacia el registro, reinicia el pid y libera la memoria simulada. |
 
-Stub T1.3: `crear_proceso` devuelve un proceso falso con `pid=0` y estado
-`LISTO`; `listar_procesos` devuelve `[]`; las consultas y finalizaciones
-devuelven `None`; `cargar_ejemplo` devuelve los datos P1-P4 del contrato.
-
-La validacion real, el registro, la asignacion de pid y la integracion con
-memoria corresponden a T3.1 y T4.2.
+Implementado en T3.1: valida nombre, pid, llegada, cpu, prioridad y memoria;
+registra cada proceso, asigna pid automatico, reserva memoria y deja el proceso
+en `LISTO` o `RECHAZADO`. `finalizar_proceso` libera la memoria y solo acepta
+procesos `LISTO` o `EJECUTANDO`. `cargar_ejemplo` reinicia el registro y carga
+P1-P4. La conexion del comando de consola se completa en T4.1 y T4.2.
 
 ## 8. `planificador.py`
 
@@ -221,12 +221,10 @@ class ResultadoPlanificacion:
 | `rr` | `rr(procesos: list[Proceso], quantum: int = 3) -> ResultadoPlanificacion` | Resultado Round Robin. |
 | `planificar` | `planificar(procesos: list[Proceso], algoritmo: str, quantum: int = 3) -> ResultadoPlanificacion` | Despacha al algoritmo indicado. |
 
-Stub T1.3: los tres planificadores devuelven un `ResultadoPlanificacion` vacio
-con listas vacias y promedios `0.0`. `rr` valida que `quantum >= 1` y
-`planificar` acepta `FCFS`, `SJF` y `RR` sin distinguir mayusculas.
-
-La implementacion real debe respetar `docs/contrato_proceso.md` y
-`docs/pseudocodigo_planificadores.md`.
+Implementado en T3.2 y T3.3: FCFS, SJF no expulsivo y Round Robin calculan
+Gantt, tiempos y promedios; no mutan los procesos y solo consideran los que
+estan en estado `LISTO`. Round Robin acepta quantum configurable y usa 3 por
+defecto.
 
 ## 9. `estadisticas.py`
 
@@ -246,8 +244,10 @@ class Estadisticas:
 | `calcular_estadisticas` | `calcular_estadisticas(resultado: ResultadoPlanificacion) -> Estadisticas` | Tiempos y promedios de una planificacion. |
 | `formatear_estadisticas` | `formatear_estadisticas(estadisticas: Estadisticas) -> str` | Tabla de texto para la consola. |
 
-Stub T1.3: devuelve estadisticas vacias y un mensaje temporal. La tabla real se
-implementa en T3.4.
+Implementado en T3.4: `calcular_estadisticas` ordena los tiempos por pid y
+recalcula los promedios de retorno y espera. `formatear_estadisticas` devuelve
+una tabla de texto con finalizacion, retorno, espera y promedios con dos
+decimales; si no hay procesos, informa que no hay datos.
 
 ## 10. `memoria.py`
 

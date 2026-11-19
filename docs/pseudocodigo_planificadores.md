@@ -447,10 +447,10 @@ Los valores coinciden con los ejemplos verificados de `docs/contrato_proceso.md`
 
 ## 9. Estado de implementación
 
-Este documento es la referencia de diseño para `planificador.py`. En `main`,
-`planificador.py` todavía conserva los stubs de T1.3; la implementación real
-corresponde a T3.2 (FCFS y SJF) y T3.3 (Round Robin). Las pruebas de los
-algoritmos se agregarán en T5.2.
+Este documento es la referencia de diseño para `planificador.py`. FCFS, SJF y
+Round Robin están implementados en la rama `persona-a` (T3.2 y T3.3), con
+pruebas para P1–P4, quantum configurable y casos límite. La rama `main` los
+recibe al fusionar `persona-a`.
 
 La prueba manual con P1–P4 se contrastó con `docs/contrato_proceso.md`; los
 Gantt y promedios de la sección 6 coinciden con el contrato.

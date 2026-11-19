@@ -190,7 +190,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Entrada:** nombre, llegada, CPU, prioridad y memoria.
 - **Salida:** `Proceso` o lista de procesos.
 - **Depende de:** `memoria.py` para reservar y liberar.
-- **Estado:** stub; se implementa en T3.1 y se integra en T4.2.
+- **Estado:** implementado en T3.1; reserva memoria al crear y la libera al
+  finalizar. La conexion del comando de consola queda para T4.1/T4.2.
 
 ### 5.7 `planificador.py`
 
@@ -200,7 +201,7 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Salida:** `ResultadoPlanificacion` con Gantt, tiempos y promedios.
 - **Reglas:** no muta procesos; solo considera `LISTO`; desempata por `pid`.
 - **Referencia:** [`docs/pseudocodigo_planificadores.md`](./pseudocodigo_planificadores.md).
-- **Estado:** stub; se implementa en T3.2 y T3.3.
+- **Estado:** implementado en T3.2 (FCFS/SJF) y T3.3 (Round Robin).
 
 ### 5.8 `estadisticas.py`
 
@@ -208,7 +209,7 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Función:** calcular finalización, retorno, espera y promedios.
 - **Entrada:** `ResultadoPlanificacion`.
 - **Salida:** `Estadisticas` y tabla de texto.
-- **Estado:** stub; se implementa en T3.4.
+- **Estado:** implementado en T3.4.
 
 ### 5.9 `memoria.py`
 
@@ -254,7 +255,9 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - `pruebas/test_lexer.py`: cubre el lexer.
 - `pruebas/test_hilos_sync.py`: cubre los tres modos de concurrencia.
 - `pruebas/test_persona_b.py`: cubre memoria, archivos, ayuda y tokens.
-- `pruebas/test_planificador.py`: pendiente; se implementa en T5.2.
+- `pruebas/test_procesos.py`: cubre el ciclo de vida de los procesos.
+- `pruebas/test_planificador.py`: cubre FCFS, SJF y Round Robin.
+- `pruebas/test_estadisticas.py`: cubre promedios y formato.
 - `pruebas/demo.txt`: guion de demostración; la versión completa está en
   `persona-C` (T4.3).
 - `docs/`: contrato, firmas, terminales, pseudocódigo, diagramas y este
@@ -299,16 +302,20 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 
 ## 8. Estado actual y pendientes
 
-### 8.1 Disponible en `main`
+### 8.1 Disponible en `persona-a`
 
 - `tokens.py` y `lexer.py` implementados y probados.
 - `consola.py` implementa `ayuda` y `tokens` (T3.6).
 - `memoria.py` implementado con reserva, liberación y estado (T3.7).
 - `archivos.py` implementado con sandbox en `carpeta_pruebas/` (T3.8).
+- `procesos.py` implementado con ciclo de vida y memoria (T3.1).
+- `planificador.py` implementado con FCFS, SJF y Round Robin (T3.2/T3.3).
+- `estadisticas.py` implementado con promedios y tabla (T3.4).
 - `hilos_sync.py` implementado con hilos reales.
 - Diagramas de arquitectura y flujo de consola de T1.4.
 - Contrato T1.2, firmas T1.3, terminales T1.1 y pseudocódigo T1.5.
-- 51 pruebas unitarias del lexer, hilos, memoria, archivos, ayuda y tokens.
+- 91 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
+  planificadores, estadísticas, ayuda y tokens.
 
 ### 8.2 Pendiente de integración
 
@@ -316,9 +323,9 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
   fusionados en `main`.
 - Modo script de T4.3: implementado en `persona-C`, aún no fusionado.
 - Despachador de T4.1.
-- Implementación de procesos, planificador y estadísticas.
+- Conexión de procesos, planificador y estadísticas con la consola.
 - Integración automática de memoria con procesos en T4.2.
-- Pruebas del planificador y pruebas de extremo a extremo.
+- Pruebas de extremo a extremo.
 
 ### 8.3 Riesgos
 
@@ -326,7 +333,7 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 |---|---|
 | Diferencias entre T1.1 y T1.2 | T1.2 es la sintaxis canónica; T1.1 queda como propuesta. |
 | Módulos que no encajan al integrar | Firmas cerradas en T1.3 y stubs importables. |
-| Pérdida de tiempo en rebases | Integrar pronto la rama de C y las tareas de A. |
+| Pérdida de tiempo en rebases | Integrar pronto la rama de C y cerrar T4.1. |
 | Errores en la demo | `pruebas/demo.txt`, capturas y ensayos. |
 | Archivos fuera del sandbox | Validación de rutas en `archivos.py`. |
 
@@ -339,10 +346,10 @@ python3 -m unittest discover -s pruebas -v
 python3 main.py
 ```
 
-Validaciones realizadas sobre `main`:
+Validaciones realizadas sobre `persona-a`:
 
-- 51 pruebas unitarias del lexer, hilos, memoria, archivos, ayuda y tokens:
-  correctas.
+- 91 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
+  planificadores, estadísticas, ayuda y tokens: correctas.
 - Importación de todos los módulos: correcta.
 - Consola con `ayuda planificar`, `tokens crear proceso editor llegada=0` y
   `salir`: correcta.
