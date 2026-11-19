@@ -1,5 +1,6 @@
 """Planificadores FCFS, SJF y Round Robin del simulador."""
 
+from collections import deque
 from dataclasses import dataclass
 
 from procesos import EstadoProceso, Proceso
@@ -83,6 +84,15 @@ def _promedios(tiempos: list[TiempoProceso]) -> tuple[float, float]:
     )
 
 
+def _encolar_llegadas(
+    pendientes: deque[Proceso],
+    cola: deque[Proceso],
+    t: int,
+) -> None:
+    while pendientes and pendientes[0].llegada <= t:
+        cola.append(pendientes.popleft())
+
+
 def _construir_resultado(
     algoritmo: str,
     quantum: int | None,
@@ -98,13 +108,6 @@ def _construir_resultado(
         promedio_retorno=promedio_retorno,
         promedio_espera=promedio_espera,
     )
-
-
-def _resultado_vacio(
-    algoritmo: str,
-    quantum: int | None = None,
-) -> ResultadoPlanificacion:
-    return _construir_resultado(algoritmo, quantum, [], [])
 
 
 def fcfs(procesos: list[Proceso]) -> ResultadoPlanificacion:
@@ -164,13 +167,47 @@ def rr(
     procesos: list[Proceso],
     quantum: int = 3,
 ) -> ResultadoPlanificacion:
-    """Devuelve un resultado Round Robin vacio.
+    """Planifica Round Robin con turnos de quantum."""
+    if not isinstance(quantum, int) or isinstance(quantum, bool) or quantum < 1:
+        raise ValueError("El quantum debe ser un entero mayor o igual que 1")
 
-    Stub T1.3: la implementacion real corresponde a T3.3.
-    """
-    if quantum < 1:
-        raise ValueError("El quantum debe ser mayor o igual que 1")
-    return _resultado_vacio("RR", quantum)
+    listos = _listos(procesos)
+    pendientes: deque[Proceso] = deque(
+        sorted(listos, key=lambda proceso: (proceso.llegada, proceso.pid))
+    )
+    cola: deque[Proceso] = deque()
+    restante = {proceso.pid: proceso.cpu for proceso in listos}
+
+    t = 0
+    ejecuciones: list[Ejecucion] = []
+    inicio_por_pid: dict[int, int] = {}
+    fin_por_pid: dict[int, int] = {}
+
+    while pendientes or cola:
+        _encolar_llegadas(pendientes, cola, t)
+        if not cola:
+            t = pendientes[0].llegada
+            continue
+
+        proceso = cola.popleft()
+        usar = min(quantum, restante[proceso.pid])
+        inicio = t
+        fin = t + usar
+        ejecuciones.append(Ejecucion(proceso.pid, proceso.nombre, inicio, fin))
+        if proceso.pid not in inicio_por_pid:
+            inicio_por_pid[proceso.pid] = inicio
+
+        restante[proceso.pid] -= usar
+        t = fin
+        _encolar_llegadas(pendientes, cola, t)
+
+        if restante[proceso.pid] > 0:
+            cola.append(proceso)
+        else:
+            fin_por_pid[proceso.pid] = fin
+
+    tiempos = _construir_tiempos(listos, inicio_por_pid, fin_por_pid)
+    return _construir_resultado("RR", quantum, ejecuciones, tiempos)
 
 
 def planificar(

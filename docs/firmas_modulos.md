@@ -221,9 +221,10 @@ class ResultadoPlanificacion:
 | `rr` | `rr(procesos: list[Proceso], quantum: int = 3) -> ResultadoPlanificacion` | Resultado Round Robin. |
 | `planificar` | `planificar(procesos: list[Proceso], algoritmo: str, quantum: int = 3) -> ResultadoPlanificacion` | Despacha al algoritmo indicado. |
 
-Implementado en T3.2: FCFS y SJF no expulsivo calculan Gantt, tiempos y
-promedios; no mutan los procesos y solo consideran los que estan en estado
-`LISTO`. Round Robin se implementa en T3.3.
+Implementado en T3.2 y T3.3: FCFS, SJF no expulsivo y Round Robin calculan
+Gantt, tiempos y promedios; no mutan los procesos y solo consideran los que
+estan en estado `LISTO`. Round Robin acepta quantum configurable y usa 3 por
+defecto.
 
 ## 9. `estadisticas.py`
 

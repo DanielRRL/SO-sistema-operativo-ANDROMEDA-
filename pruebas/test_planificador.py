@@ -1,6 +1,6 @@
 import unittest
 
-from planificador import fcfs, planificar, sjf
+from planificador import fcfs, planificar, rr, sjf
 from procesos import EstadoProceso, Proceso
 
 
@@ -147,6 +147,130 @@ class TestSJF(unittest.TestCase):
         ]
         self.assertEqual(gantt(sjf(procesos)), [(1, 0, 2)])
         self.assertEqual([tiempo.pid for tiempo in sjf(procesos).tiempos], [1])
+
+
+class TestRoundRobin(unittest.TestCase):
+    def test_ejemplo_quantum_3(self):
+        resultado = rr(ejemplo(), quantum=3)
+
+        self.assertEqual(resultado.algoritmo, "RR")
+        self.assertEqual(resultado.quantum, 3)
+        self.assertEqual(
+            gantt(resultado),
+            [
+                (1, 0, 3),
+                (2, 3, 6),
+                (3, 6, 9),
+                (4, 9, 12),
+                (1, 12, 15),
+                (2, 15, 16),
+                (3, 16, 19),
+                (4, 19, 21),
+                (1, 21, 23),
+                (3, 23, 26),
+            ],
+        )
+        self.assertEqual(
+            tiempos(resultado),
+            [
+                (1, 0, 23, 23, 15),
+                (2, 3, 16, 15, 11),
+                (3, 6, 26, 24, 15),
+                (4, 9, 21, 18, 13),
+            ],
+        )
+        self.assertEqual(resultado.promedio_retorno, 20.0)
+        self.assertEqual(resultado.promedio_espera, 13.5)
+
+    def test_quantum_configurable_2(self):
+        resultado = rr(ejemplo(), quantum=2)
+
+        self.assertEqual(
+            gantt(resultado),
+            [
+                (1, 0, 2),
+                (2, 2, 4),
+                (3, 4, 6),
+                (1, 6, 8),
+                (4, 8, 10),
+                (2, 10, 12),
+                (3, 12, 14),
+                (1, 14, 16),
+                (4, 16, 18),
+                (3, 18, 20),
+                (1, 20, 22),
+                (4, 22, 23),
+                (3, 23, 25),
+                (3, 25, 26),
+            ],
+        )
+        self.assertEqual(
+            tiempos(resultado),
+            [
+                (1, 0, 22, 22, 14),
+                (2, 2, 12, 11, 7),
+                (3, 4, 26, 24, 15),
+                (4, 8, 23, 20, 15),
+            ],
+        )
+        self.assertEqual(resultado.promedio_retorno, 19.25)
+        self.assertEqual(resultado.promedio_espera, 12.75)
+
+    def test_llegada_justo_al_final_del_quantum(self):
+        procesos = [
+            Proceso(1, "P1", 0, 4, 1, 10, EstadoProceso.LISTO),
+            Proceso(2, "P2", 3, 1, 1, 10, EstadoProceso.LISTO),
+        ]
+        self.assertEqual(
+            gantt(rr(procesos, quantum=3)),
+            [(1, 0, 3), (2, 3, 4), (1, 4, 5)],
+        )
+
+    def test_avanza_hasta_la_primera_llegada(self):
+        procesos = [
+            Proceso(1, "P1", 5, 4, 1, 10, EstadoProceso.LISTO),
+            Proceso(2, "P2", 5, 2, 1, 10, EstadoProceso.LISTO),
+        ]
+        self.assertEqual(
+            gantt(rr(procesos, quantum=3)),
+            [(1, 5, 8), (2, 8, 10), (1, 10, 11)],
+        )
+
+    def test_ignora_procesos_no_listos(self):
+        procesos = [
+            Proceso(1, "P1", 0, 2, 1, 10, EstadoProceso.LISTO),
+            Proceso(2, "P2", 0, 1, 1, 10, EstadoProceso.RECHAZADO),
+        ]
+        resultado = rr(procesos)
+        self.assertEqual(gantt(resultado), [(1, 0, 2)])
+        self.assertEqual([tiempo.pid for tiempo in resultado.tiempos], [1])
+
+    def test_sin_procesos_listos(self):
+        resultado = rr([])
+        self.assertEqual(resultado.algoritmo, "RR")
+        self.assertEqual(resultado.quantum, 3)
+        self.assertEqual(resultado.ejecuciones, [])
+        self.assertEqual(resultado.tiempos, [])
+        self.assertEqual(resultado.promedio_retorno, 0.0)
+        self.assertEqual(resultado.promedio_espera, 0.0)
+
+    def test_no_modifica_los_procesos(self):
+        procesos = ejemplo()
+        antes = [(p.pid, p.estado, p.cpu, p.llegada) for p in procesos]
+        rr(procesos)
+        despues = [(p.pid, p.estado, p.cpu, p.llegada) for p in procesos]
+        self.assertEqual(antes, despues)
+
+    def test_quantum_invalido(self):
+        for quantum in (0, -1, True, 1.5):
+            with self.subTest(quantum=quantum):
+                with self.assertRaises(ValueError):
+                    rr(ejemplo(), quantum=quantum)
+
+    def test_planificar_rr(self):
+        resultado = planificar(ejemplo(), "rr", quantum=2)
+        self.assertEqual(resultado.algoritmo, "RR")
+        self.assertEqual(resultado.quantum, 2)
 
 
 class TestDespacho(unittest.TestCase):
