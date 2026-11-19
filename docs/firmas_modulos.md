@@ -173,11 +173,12 @@ class Proceso:
 | `cargar_ejemplo` | `cargar_ejemplo() -> list[Proceso]` | Los cuatro procesos verificados P1-P4 en estado `LISTO`. |
 | `reiniciar_procesos` | `reiniciar_procesos() -> None` | Vacia el registro, reinicia el pid y libera la memoria simulada. |
 
-Implementado en T3.1: valida nombre, pid, llegada, cpu, prioridad y memoria;
-registra cada proceso, asigna pid automatico, reserva memoria y deja el proceso
-en `LISTO` o `RECHAZADO`. `finalizar_proceso` libera la memoria y solo acepta
-procesos `LISTO` o `EJECUTANDO`. `cargar_ejemplo` reinicia el registro y carga
-P1-P4. La conexion del comando de consola se completa en T4.1 y T4.2.
+Implementado en T3.1 y validado en T4.2: valida nombre, pid, llegada, cpu,
+prioridad y memoria; registra cada proceso, asigna pid automatico, reserva
+memoria y deja el proceso en `LISTO` o `RECHAZADO`. `finalizar_proceso` libera
+la memoria y solo acepta procesos `LISTO` o `EJECUTANDO`. `cargar_ejemplo`
+reinicia el registro y carga P1-P4. La conexion del comando de consola se
+completa en T4.1.
 
 ## 8. `planificador.py`
 

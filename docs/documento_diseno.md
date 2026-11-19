@@ -190,8 +190,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Entrada:** nombre, llegada, CPU, prioridad y memoria.
 - **Salida:** `Proceso` o lista de procesos.
 - **Depende de:** `memoria.py` para reservar y liberar.
-- **Estado:** implementado en T3.1; reserva memoria al crear y la libera al
-  finalizar. La conexion del comando de consola queda para T4.1/T4.2.
+- **Estado:** implementado en T3.1 y validado en T4.2; reserva memoria al crear
+  y la libera al finalizar. La conexion del comando de consola queda para T4.1.
 
 ### 5.7 `planificador.py`
 
@@ -218,8 +218,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Entrada:** `pid` y cantidad de MB.
 - **Salida:** resultado de reserva, MB liberados o `EstadoMemoria`.
 - **Regla:** si no hay capacidad, el proceso queda `RECHAZADO`.
-- **Estado:** implementado en T3.7; la integración automática con procesos se
-  completa en T4.2.
+- **Estado:** implementado en T3.7; la integración con procesos quedó validada
+  en T4.2.
 
 ### 5.10 `archivos.py`
 
@@ -256,6 +256,7 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - `pruebas/test_hilos_sync.py`: cubre los tres modos de concurrencia.
 - `pruebas/test_persona_b.py`: cubre memoria, archivos, ayuda y tokens.
 - `pruebas/test_procesos.py`: cubre el ciclo de vida de los procesos.
+- `pruebas/test_integracion_memoria.py`: cubre la integración memoria-procesos.
 - `pruebas/test_planificador.py`: cubre FCFS, SJF y Round Robin.
 - `pruebas/test_estadisticas.py`: cubre promedios y formato.
 - `pruebas/demo.txt`: guion de demostración; la versión completa está en
@@ -309,12 +310,13 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 - `memoria.py` implementado con reserva, liberación y estado (T3.7).
 - `archivos.py` implementado con sandbox en `carpeta_pruebas/` (T3.8).
 - `procesos.py` implementado con ciclo de vida y memoria (T3.1).
+- Integración memoria-procesos validada con reserva, rechazo y liberación (T4.2).
 - `planificador.py` implementado con FCFS, SJF y Round Robin (T3.2/T3.3).
 - `estadisticas.py` implementado con promedios y tabla (T3.4).
 - `hilos_sync.py` implementado con hilos reales.
 - Diagramas de arquitectura y flujo de consola de T1.4.
 - Contrato T1.2, firmas T1.3, terminales T1.1 y pseudocódigo T1.5.
-- 91 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
+- 99 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
   planificadores, estadísticas, ayuda y tokens.
 
 ### 8.2 Pendiente de integración
@@ -324,7 +326,6 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 - Modo script de T4.3: implementado en `persona-C`, aún no fusionado.
 - Despachador de T4.1.
 - Conexión de procesos, planificador y estadísticas con la consola.
-- Integración automática de memoria con procesos en T4.2.
 - Pruebas de extremo a extremo.
 
 ### 8.3 Riesgos
@@ -348,8 +349,10 @@ python3 main.py
 
 Validaciones realizadas sobre `persona-a`:
 
-- 91 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
+- 99 pruebas unitarias de lexer, hilos, memoria, archivos, procesos,
   planificadores, estadísticas, ayuda y tokens: correctas.
+- Integración memoria-procesos validada: reserva, rechazo por capacidad y
+  liberación al finalizar.
 - Importación de todos los módulos: correcta.
 - Consola con `ayuda planificar`, `tokens crear proceso editor llegada=0` y
   `salir`: correcta.
