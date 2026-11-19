@@ -169,7 +169,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Entrada:** `Orden`.
 - **Salida:** `str` con `[OK]` o `[ERROR]`.
 - **Depende de:** todos los módulos de simulación.
-- **Estado:** stub; se implementa en T4.1.
+- **Estado:** T3.6 implementa `ayuda` y `tokens`; el despacho del resto de
+  comandos se completa en T4.1.
 
 ### 5.5 `main.py`
 
@@ -177,10 +178,10 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Función:** punto de entrada y bucle de lectura.
 - **Entrada:** texto del usuario o archivo de script.
 - **Salida:** texto en terminal.
-- **Características:** prompt fijo, `salir`, `limpiar`, `Ctrl+C`, `Ctrl+D` y
-  modo `--script`.
-- **Estado:** esqueleto de T2.1 en `main`; el modo script de T4.3 está en
-  `persona-C`, pendiente de integración.
+- **Características:** prompt fijo, `salir`, `limpiar`, `Ctrl+C`, `Ctrl+D`,
+  `ayuda`, `tokens` y modo `--script`.
+- **Estado:** T2.1 mantiene el bucle y T3.6 conecta `ayuda`/`tokens`; el modo
+  script de T4.3 está en `persona-C`, pendiente de integración.
 
 ### 5.6 `procesos.py`
 
@@ -216,7 +217,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Entrada:** `pid` y cantidad de MB.
 - **Salida:** resultado de reserva, MB liberados o `EstadoMemoria`.
 - **Regla:** si no hay capacidad, el proceso queda `RECHAZADO`.
-- **Estado:** stub; se implementa en T3.7 y se integra en T4.2.
+- **Estado:** implementado en T3.7; la integración automática con procesos se
+  completa en T4.2.
 
 ### 5.10 `archivos.py`
 
@@ -226,7 +228,7 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Salida:** `ArchivoInfo`, texto o `bool`.
 - **Seguridad:** solo opera dentro de `carpeta_pruebas/`; rechaza `..` y rutas
   externas.
-- **Estado:** stub; se implementa en T3.8.
+- **Estado:** implementado en T3.8.
 
 ### 5.11 `hilos_sync.py`
 
@@ -251,6 +253,7 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 
 - `pruebas/test_lexer.py`: cubre el lexer.
 - `pruebas/test_hilos_sync.py`: cubre los tres modos de concurrencia.
+- `pruebas/test_persona_b.py`: cubre memoria, archivos, ayuda y tokens.
 - `pruebas/test_planificador.py`: pendiente; se implementa en T5.2.
 - `pruebas/demo.txt`: guion de demostración; la versión completa está en
   `persona-C` (T4.3).
@@ -299,10 +302,13 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 ### 8.1 Disponible en `main`
 
 - `tokens.py` y `lexer.py` implementados y probados.
+- `consola.py` implementa `ayuda` y `tokens` (T3.6).
+- `memoria.py` implementado con reserva, liberación y estado (T3.7).
+- `archivos.py` implementado con sandbox en `carpeta_pruebas/` (T3.8).
 - `hilos_sync.py` implementado con hilos reales.
 - Diagramas de arquitectura y flujo de consola de T1.4.
 - Contrato T1.2, firmas T1.3, terminales T1.1 y pseudocódigo T1.5.
-- 37 pruebas unitarias del lexer y de hilos.
+- 51 pruebas unitarias del lexer, hilos, memoria, archivos, ayuda y tokens.
 
 ### 8.2 Pendiente de integración
 
@@ -310,7 +316,8 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
   fusionados en `main`.
 - Modo script de T4.3: implementado en `persona-C`, aún no fusionado.
 - Despachador de T4.1.
-- Implementación de procesos, planificador, estadísticas, memoria y archivos.
+- Implementación de procesos, planificador y estadísticas.
+- Integración automática de memoria con procesos en T4.2.
 - Pruebas del planificador y pruebas de extremo a extremo.
 
 ### 8.3 Riesgos
@@ -319,7 +326,7 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 |---|---|
 | Diferencias entre T1.1 y T1.2 | T1.2 es la sintaxis canónica; T1.1 queda como propuesta. |
 | Módulos que no encajan al integrar | Firmas cerradas en T1.3 y stubs importables. |
-| Pérdida de tiempo en rebases | Integrar pronto las ramas de C y D. |
+| Pérdida de tiempo en rebases | Integrar pronto la rama de C y las tareas de A. |
 | Errores en la demo | `pruebas/demo.txt`, capturas y ensayos. |
 | Archivos fuera del sandbox | Validación de rutas en `archivos.py`. |
 
@@ -334,9 +341,11 @@ python3 main.py
 
 Validaciones realizadas sobre `main`:
 
-- 37 pruebas unitarias del lexer y de hilos: correctas.
+- 51 pruebas unitarias del lexer, hilos, memoria, archivos, ayuda y tokens:
+  correctas.
 - Importación de todos los módulos: correcta.
-- Consola con `tokens crear proceso editor llegada=0` y `salir`: correcta.
+- Consola con `ayuda planificar`, `tokens crear proceso editor llegada=0` y
+  `salir`: correcta.
 - Diagramas y referencias de T1.4: presentes.
 - Valores de T1.5: coinciden con el contrato T1.2.
 
