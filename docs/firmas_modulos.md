@@ -122,9 +122,9 @@ class Orden:
 | `Orden` | Dataclass anterior | Orden estructurada que recibe el despachador. |
 | `parsear` | `parsear(tokens: list[Token]) -> Orden` | Orden validada; lanza `ValueError` si la gramatica no es correcta. |
 
-Stub T1.3: usa el primer token como `comando`, el resto como `argumentos` y
-junta los lexemas en `linea_original`. No valida la gramatica todavia. La
-validacion completa corresponde a T3.9.
+Implementado en T3.9: valida la gramatica completa de T1.2, construye una
+`Orden` con comando, subcomando, argumentos y atributos, y lanza
+`ErrorSintaxis` (subclase de `ValueError`) con el uso correcto.
 
 ## 6. `consola.py`
 
@@ -345,19 +345,20 @@ Responsable: C.
 | `cantidad` | `cantidad() -> int` | Cantidad de mensajes pendientes. |
 | `limpiar` | `limpiar() -> None` | Vacía la cola. |
 
-Stub T1.3: `enviar` y `limpiar` no hacen nada; `recibir` devuelve `None` y
-`cantidad` devuelve `0`. La cola FIFO real corresponde a T3.10.
+Implementado en T3.10 con `queue.Queue`: la cola es FIFO y segura entre hilos.
+`recibir` no bloquea y devuelve `None` si la cola esta vacia.
 
 ## 14. `main.py`
 
-Responsable: C. Ya implementado en T2.1; no se modifica en T1.3.
+Responsable: C. Integrado con T2.1, T3.6, T3.9 y T4.3; el despacho del resto de
+comandos se completa en T4.1.
 
 | Simbolo | Firma | Uso actual |
 |---|---|---|
 | `limpiar_pantalla` | `limpiar_pantalla() -> None` | Limpia la terminal con `cls` o `clear`. |
-| `mostrar_tokens` | `mostrar_tokens(tokens: list[Token]) -> None` | Imprime tipo, lexema y columna. |
-| `ejecutar_linea` | `ejecutar_linea(linea: str) -> bool` | Procesa una linea; `False` termina el bucle. |
-| `main` | `main() -> None` | Bucle principal de la consola. |
+| `ejecutar_linea` | `ejecutar_linea(linea: str) -> bool` | Parsea y procesa una linea; `False` termina el bucle. |
+| `ejecutar_script` | `ejecutar_script(ruta: str) -> None` | Ejecuta las lineas de un archivo. |
+| `main` | `main() -> None` | Bucle principal y modo `--script`. |
 
 ## 15. Comportamiento de los stubs
 
@@ -370,7 +371,8 @@ Responsable: C. Ya implementado en T2.1; no se modifica en T1.3.
 | Consola | `main.py` sigue funcionando con el lexer real y el campo `lexema`. |
 | Reemplazo | Cada stub se sustituye en su tarea de implementacion de la fase 3 o 4. |
 
-`tokens.py` y `lexer.py` ya no son stubs: se implementaron y probaron en T3.5.
+`tokens.py`, `lexer.py`, `parser.py`, `mensajes.py`, `memoria.py` y
+`archivos.py` ya no son stubs: se implementaron y probaron en T3.5-T3.10.
 
 ## 16. Verificacion de T1.3
 

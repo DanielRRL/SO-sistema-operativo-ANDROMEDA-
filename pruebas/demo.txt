@@ -1,1 +1,34 @@
-# Este es el archivo
+# Sesion de ejemplo del simulador. Ejecutar con:
+#   python main.py --script pruebas/demo.txt
+# Las lineas que empiezan con # se ignoran.
+
+ayuda
+ayuda planificar
+tokens crear proceso editor llegada=0 cpu=8
+ejemplo
+listar procesos
+consultar proceso 2
+planificar fcfs
+estadisticas
+planificar sjf
+estadisticas
+planificar rr quantum=3
+estadisticas
+memoria estado
+# El siguiente comando debe fallar: excede la capacidad
+memoria asignar 1 2000
+finalizar proceso 1
+memoria estado
+concurrencia sin_lock
+concurrencia con_lock
+concurrencia semaforo
+mensaje enviar "hola"
+mensaje recibir
+archivo crear notas.txt "primera linea"
+archivo listar
+archivo leer notas.txt
+archivo modificar notas.txt "segunda linea"
+archivo eliminar notas.txt
+# Error de sintaxis a proposito: falta la palabra proceso
+crear editor cpu=8
+salir
