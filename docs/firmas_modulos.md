@@ -135,9 +135,10 @@ Responsable: C.
 | `despachar` | `despachar(orden: Orden) -> str` | Ejecuta la orden y devuelve el texto para imprimir. |
 | `ayuda` | `ayuda(palabra: str \| None = None) -> str` | Ayuda general o detalle de una palabra. |
 
-Stub T1.3: `despachar` devuelve `[ERROR] Despacho pendiente...` y `ayuda`
-devuelve un mensaje de ayuda pendiente. La conexion real con los modulos
-corresponde a T4.1.
+Implementacion T3.6: `ayuda` muestra el listado general o la definicion y
+ejemplo de una palabra. `despachar` resuelve `ayuda` y `tokens`; este ultimo
+muestra la tabla de terminales sin argumentos y tokeniza el texto indicado.
+La conexion del resto de comandos con sus modulos corresponde a T4.1.
 
 ## 7. `procesos.py`
 
@@ -271,9 +272,11 @@ class EstadoMemoria:
 | `estado_memoria` | `estado_memoria() -> EstadoMemoria` | Total, usada, libre y asignaciones. |
 | `reiniciar_memoria` | `reiniciar_memoria() -> None` | Deja la memoria como al inicio. |
 
-Stub T1.3: `reservar` devuelve `True`, `liberar` devuelve `0` y
-`estado_memoria` devuelve 1024 MB libres sin asignaciones. La validacion real de
-capacidad corresponde a T3.7.
+Implementado en T3.7: las reservas se registran hasta un maximo de 1024 MB;
+una reserva sin capacidad disponible o para un pid ya asignado devuelve
+`False`. Los argumentos no validos producen `ValueError`. `liberar` devuelve
+los MB liberados (o `0` si el pid no tiene asignacion), y `estado_memoria`
+devuelve una copia de las asignaciones actuales.
 
 ## 11. `archivos.py`
 
@@ -299,11 +302,11 @@ class ArchivoInfo:
 | `eliminar_archivo` | `eliminar_archivo(nombre: str) -> bool` | `True` si se elimino. |
 | `existe_archivo` | `existe_archivo(nombre: str) -> bool` | `True` si existe dentro de la carpeta de pruebas. |
 
-Stub T1.3: ninguna funcion toca el disco. `crear_archivo` y
-`modificar_archivo` devuelven `ArchivoInfo` falso; `listar_archivos` devuelve
-`[]`; `leer_archivo` devuelve `""`; `eliminar_archivo` devuelve `True`;
-`existe_archivo` devuelve `False`; `validar_nombre` devuelve el nombre sin
-validar todavia. La seguridad de rutas corresponde a T3.8.
+Implementado en T3.8: las operaciones usan UTF-8 y se limitan a archivos
+simples dentro de `carpeta_pruebas`. Se rechazan rutas, nombres inseguros y
+palabras reservadas. Crear no sobrescribe; modificar agrega contenido al final;
+leer o modificar un archivo inexistente produce `FileNotFoundError`, y eliminar
+devuelve `False` si el archivo no existe.
 
 ## 12. `hilos_sync.py`
 

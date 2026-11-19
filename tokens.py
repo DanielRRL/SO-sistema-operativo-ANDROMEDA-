@@ -19,7 +19,7 @@ _DEFINICIONES: dict[str, tuple[str, str, str]] = {
     "listar": ("LISTAR", "Lista los procesos registrados o los archivos de carpeta_pruebas.", "listar procesos"),
     "consultar": ("CONSULTAR", "Muestra los datos de un proceso.", "consultar proceso 1"),
     "finalizar": ("FINALIZAR", "Marca un proceso como terminado y libera su memoria.", "finalizar proceso 1"),
-    "planificar": ("PLANIFICAR", "Ejecuta un algoritmo de planificación sobre los procesos listos.", "planificar sjf"),
+    "planificar": ("PLANIFICAR", "Ejecuta FCFS, SJF o Round Robin sobre los procesos listos.", "planificar sjf"),
     "estadisticas": ("ESTADISTICAS", "Muestra los tiempos y promedios de la última planificación.", "estadisticas"),
     "concurrencia": ("CONCURRENCIA", "Ejecuta la demostración de hilos sobre un recurso compartido.", "concurrencia con_lock"),
     "mensaje": ("MENSAJE", "Trabaja con la cola FIFO de mensajes.", "mensaje enviar \"listo\""),
