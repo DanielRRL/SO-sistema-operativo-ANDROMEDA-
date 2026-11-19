@@ -221,12 +221,9 @@ class ResultadoPlanificacion:
 | `rr` | `rr(procesos: list[Proceso], quantum: int = 3) -> ResultadoPlanificacion` | Resultado Round Robin. |
 | `planificar` | `planificar(procesos: list[Proceso], algoritmo: str, quantum: int = 3) -> ResultadoPlanificacion` | Despacha al algoritmo indicado. |
 
-Stub T1.3: los tres planificadores devuelven un `ResultadoPlanificacion` vacio
-con listas vacias y promedios `0.0`. `rr` valida que `quantum >= 1` y
-`planificar` acepta `FCFS`, `SJF` y `RR` sin distinguir mayusculas.
-
-La implementacion real debe respetar `docs/contrato_proceso.md` y
-`docs/pseudocodigo_planificadores.md`.
+Implementado en T3.2: FCFS y SJF no expulsivo calculan Gantt, tiempos y
+promedios; no mutan los procesos y solo consideran los que estan en estado
+`LISTO`. Round Robin se implementa en T3.3.
 
 ## 9. `estadisticas.py`
 
