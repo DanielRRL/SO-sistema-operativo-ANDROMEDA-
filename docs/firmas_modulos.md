@@ -244,8 +244,10 @@ class Estadisticas:
 | `calcular_estadisticas` | `calcular_estadisticas(resultado: ResultadoPlanificacion) -> Estadisticas` | Tiempos y promedios de una planificacion. |
 | `formatear_estadisticas` | `formatear_estadisticas(estadisticas: Estadisticas) -> str` | Tabla de texto para la consola. |
 
-Stub T1.3: devuelve estadisticas vacias y un mensaje temporal. La tabla real se
-implementa en T3.4.
+Implementado en T3.4: `calcular_estadisticas` ordena los tiempos por pid y
+recalcula los promedios de retorno y espera. `formatear_estadisticas` devuelve
+una tabla de texto con finalizacion, retorno, espera y promedios con dos
+decimales; si no hay procesos, informa que no hay datos.
 
 ## 10. `memoria.py`
 
