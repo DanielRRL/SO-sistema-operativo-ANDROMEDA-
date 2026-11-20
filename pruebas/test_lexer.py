@@ -243,6 +243,83 @@ class TestLexer(unittest.TestCase):
         self.assertEqual(tipos(tokens), ["NOMBRE_ARCHIVO", "FIN"])
         self.assertEqual(tokens[0].lexema, "123.txt")
 
+    def test_matriz_de_25_casos_validos(self):
+        casos_validos = [
+            ("crear", "CREAR"),
+            ("listar", "LISTAR"),
+            ("consultar", "CONSULTAR"),
+            ("finalizar", "FINALIZAR"),
+            ("planificar", "PLANIFICAR"),
+            ("estadisticas", "ESTADISTICAS"),
+            ("concurrencia", "CONCURRENCIA"),
+            ("mensaje", "MENSAJE"),
+            ("memoria", "MEMORIA"),
+            ("archivo", "ARCHIVO"),
+            ("ejemplo", "EJEMPLO"),
+            ("ayuda", "AYUDA"),
+            ("tokens", "TOKENS"),
+            ("limpiar", "LIMPIAR"),
+            ("salir", "SALIR"),
+            ("proceso", "PROCESO"),
+            ("sin_lock", "SIN_LOCK"),
+            ("MiProceso_2", "ID"),
+            ("notas.txt", "NOMBRE_ARCHIVO"),
+            ("123.log", "NOMBRE_ARCHIVO"),
+            ("0", "NUMERO"),
+            ("1024", "NUMERO"),
+            ('"hola mundo"', "CADENA"),
+            ("=", "IGUAL"),
+            ("# comentario", "FIN"),
+        ]
+        self.assertGreaterEqual(len(casos_validos), 25)
+
+        for entrada, tipo_esperado in casos_validos:
+            with self.subTest(entrada=entrada):
+                resultado = tokenizar(entrada)
+                self.assertEqual(resultado[0].tipo, tipo_esperado)
+                self.assertEqual(resultado[-1].tipo, "FIN")
+                self.assertNotIn("ERROR", tipos(resultado))
+
+    def test_matriz_de_25_casos_invalidos(self):
+        caracteres_invalidos = [
+            "@",
+            "$",
+            "%",
+            "^",
+            "&",
+            "*",
+            "+",
+            "-",
+            "/",
+            "\\",
+            ":",
+            ";",
+            "?",
+            "!",
+            "[",
+            "]",
+            "{",
+            "}",
+            "(",
+            ")",
+            ",",
+            ".",
+            "á",
+            "ñ",
+            "€",
+        ]
+        self.assertGreaterEqual(len(caracteres_invalidos), 25)
+
+        for caracter in caracteres_invalidos:
+            with self.subTest(caracter=caracter):
+                resultado = tokenizar(f"crear {caracter}")
+                self.assertIn("ERROR", tipos(resultado))
+                self.assertEqual(resultado[-1].tipo, "FIN")
+
+        for entrada in ('mensaje enviar "sin cerrar', 'mensaje enviar "corte\\'):
+            with self.subTest(entrada=entrada):
+                self.assertIn("ERROR", tipos(tokenizar(entrada)))
+
 
 if __name__ == "__main__":
     unittest.main()
