@@ -140,9 +140,9 @@ responsables (A, B, C, D). El historial de git y el plan de trabajo
 - **Utilidades:** `ayuda`, `tokens`, `ejemplo`, `limpiar`, `salir` y modo
   `--script`.
 
-> **Estado actual:** T4.1 ya está integrado en `main`; el despachador conecta
-> todos los comandos y las pruebas de error T5.3 están integradas. La suite
-> completa suma 155 pruebas.
+> **Estado actual:** T4.1, T4.4, T5.4 y T6.1/T6.3 ya están integrados en
+> `main`; el despachador conecta todos los comandos y las pruebas de error T5.3
+> están integradas. La suite completa suma 155 pruebas.
 
 ---
 
@@ -802,12 +802,9 @@ concurrencia, mensajes, archivos y errores de sintaxis en una sola sesión.
 
 ### Pendientes de documentación y cierre
 
-- Cerrar el recorrido completo (T4.4) y las pruebas de extremo a extremo (T5.4).
-- Revisión cruzada (T5.5) y versión congelada (T5.6).
-- Consolidar el documento de diseño final (T6.1).
+- Revisiones cruzadas B → C, C → D y D → A de T5.5.
+- Congelación de la versión T5.6, a cargo de C.
 - Actualizar el diagrama modular con lo realmente implementado (T6.2).
-- Completar la comparación simulación vs Linux (T6.3); las evidencias ya están
-  en `docs/evidencias/linux/`.
 - Informe final con pruebas, resultados y conclusiones (T6.4).
 - Guion, ensayos y plan B de la sustentación (T7.1–T7.3).
 

@@ -1,16 +1,16 @@
-# Documento de Diseño del Simulador de SO
+# Documento de Diseño Final — Simulador de SO
 
-- **Tarea:** T1.6
-- **Fase:** 1. Diseño
+- **Tareas:** T1.6 (borrador) / T6.1 (versión final)
+- **Fase:** 1. Diseño / 6. Documentación
 - **Responsables:** A, B, C, D
-- **Depende de:** T1.3, T1.4
-- **Estado:** Borrador v1
+- **Depende de:** T1.3, T1.4, T1.6, T6.6
+- **Estado:** Final v1
 - **Sistema objetivo:** Linux
 - **Requisitos:** Python 3.10 o superior, solo biblioteca estándar.
 
-Este es el borrador del documento de diseño del simulador de sistema operativo
-ANDROMEDA. Describe el problema, los objetivos, la arquitectura, los módulos y
-el estado actual del proyecto. La versión final se consolida en T6.1.
+Este documento consolida el diseño final del simulador de sistema operativo
+ANDROMEDA. Describe el problema, los objetivos, la arquitectura, los módulos, el
+estado del proyecto y la especificación léxica de B.
 
 ## 1. Problema
 
@@ -327,6 +327,14 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 - `hilos_sync.py` implementado con hilos reales.
 - Pruebas del lexer T5.1 y errores de consola T5.3.
 - Evidencias Linux de T3.12 en `docs/evidencias/linux/`.
+- Recorrido completo T4.4 validado y documentado en
+  [`docs/validacion_t4.4.md`](./validacion_t4.4.md).
+- Pruebas de extremo a extremo T5.4 y capturas del simulador en
+  `docs/evidencias/simulador/`.
+- Comparación simulación vs Linux en
+  [`docs/comparacion_simulacion_linux.md`](./comparacion_simulacion_linux.md).
+- Revisión cruzada A → B aprobada en
+  [`docs/revision_cruzada_A_B.md`](./revision_cruzada_A_B.md).
 - README T6.5 y anexo léxico T6.6.
 - Diagramas de arquitectura y flujo de consola de T1.4.
 - Contrato T1.2, firmas T1.3, terminales T1.1 y pseudocódigo T1.5.
@@ -335,11 +343,11 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 
 ### 8.2 Pendiente de cierre
 
-- Recorrido completo de la sesión de ejemplo (T4.4).
-- Pruebas de extremo a extremo (T5.4).
-- Revisión cruzada (T5.5) y versión congelada (T5.6).
-- Documento final, diagramas finales e informe (T6.1–T6.4).
-- Ensayo y sustentación (T7).
+- Revisiones B → C, C → D y D → A de T5.5.
+- Congelación de la versión T5.6, a cargo de C.
+- Diagrama modular final T6.2 y plan B de la demo T7.3, a cargo de D.
+- Informe final T6.4, con dificultades aportadas por cada integrante.
+- Guion, ensayos y sustentación T7.1–T7.2.
 
 ### 8.3 Riesgos
 
@@ -347,7 +355,7 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 |---|---|
 | Diferencias entre T1.1 y T1.2 | T1.2 es la sintaxis canónica; T1.1 queda como propuesta. |
 | Módulos que no encajan al integrar | Firmas cerradas en T1.3 y stubs importables. |
-| Pérdida de tiempo en rebases | C y T4.1 ya están integrados; cerrar T4.4. |
+| Pérdida de tiempo en rebases | C, T4.1 y T4.4 ya están integrados; falta T5.6. |
 | Errores en la demo | `pruebas/demo.txt`, capturas y ensayos. |
 | Archivos fuera del sandbox | Validación de rutas en `archivos.py`. |
 
@@ -369,13 +377,17 @@ Validaciones realizadas sobre `main`:
 - Casos borde de planificación verificados: un proceso, CPU ociosa, quantum 1,
   quantum mayor que la CPU y llegada al borde del quantum.
 - Parser T3.9, mensajes T3.10, despachador T4.1 y modo `--script` T4.3 validados.
-- Pruebas T5.1 y T5.3; README T6.5 y anexo léxico T6.6 integrados.
+- Pruebas T5.1, T5.2, T5.3 y T5.4; README T6.5 y anexo léxico T6.6 integrados.
+- Recorrido completo T4.4 validado por A; T5.4 y T6.3 verificados con evidencias.
+- Revisión cruzada A → B aprobada.
 - Importación de todos los módulos: correcta.
 - Consola con `ayuda planificar`, `tokens crear proceso editor llegada=0`,
   `crear proceso`, `listar procesos`, `planificar`, `estadisticas` y `salir`:
   correcta.
 - Diagramas y referencias de T1.4: presentes.
 - Valores de T1.5: coinciden con el contrato T1.2.
+- Evidencias: [`docs/evidencias/simulador/`](./evidencias/simulador/) y
+  [`docs/comparacion_simulacion_linux.md`](./comparacion_simulacion_linux.md).
 
 ## 10. Referencias
 
@@ -386,3 +398,77 @@ Validaciones realizadas sobre `main`:
 - [`docs/pseudocodigo_planificadores.md`](./pseudocodigo_planificadores.md)
 - [`docs/diagrama_modular.md`](./diagrama_modular.md)
 - [`docs/diagramas/`](./diagramas/)
+- [`docs/validacion_t4.4.md`](./validacion_t4.4.md)
+- [`docs/revision_cruzada_A_B.md`](./revision_cruzada_A_B.md)
+- [`docs/comparacion_simulacion_linux.md`](./comparacion_simulacion_linux.md)
+- [`docs/evidencias/simulador/`](./evidencias/simulador/)
+- [`docs/anexo_especificacion_lexica.md`](./anexo_especificacion_lexica.md)
+
+## Anexo A — Especificación léxica (T6.6)
+
+Este anexo resume la especificación léxica y gramatical de B. El texto completo
+está en [`docs/anexo_especificacion_lexica.md`](./anexo_especificacion_lexica.md).
+
+### A.1 Convenciones
+
+- Las palabras reservadas se reconocen sin distinguir mayúsculas; los comandos
+  se escriben en minúsculas y sin tildes.
+- Espacios, tabulaciones y retornos de carro separan tokens.
+- `FIN` se agrega una sola vez al final del texto entregado al lexer.
+- `#` inicia un comentario hasta el final de la línea, salvo dentro de cadenas.
+- Las posiciones de línea y columna empiezan en 1.
+- Los errores se reportan como tokens `ERROR` sin detener el análisis.
+
+### A.2 Terminales
+
+| Grupo | Palabras | Tipos |
+|---|---|---|
+| Procesos | `crear`, `listar`, `consultar`, `finalizar`, `proceso`, `procesos` | `CREAR`, `LISTAR`, `CONSULTAR`, `FINALIZAR`, `PROCESO`, `PROCESOS` |
+| Planificación | `planificar`, `fcfs`, `sjf`, `rr`, `quantum` | `PLANIFICAR`, `FCFS`, `SJF`, `RR`, `QUANTUM` |
+| Atributos | `llegada`, `cpu`, `prioridad`, `mem` | `LLEGADA`, `CPU`, `PRIORIDAD`, `MEM` |
+| Memoria | `memoria`, `asignar`, `liberar`, `estado` | `MEMORIA`, `ASIGNAR`, `LIBERAR`, `ESTADO` |
+| Archivos | `archivo`, `leer`, `modificar`, `eliminar` | `ARCHIVO`, `LEER`, `MODIFICAR`, `ELIMINAR` |
+| Concurrencia | `concurrencia`, `sin_lock`, `con_lock`, `semaforo` | `CONCURRENCIA`, `SIN_LOCK`, `CON_LOCK`, `SEMAFORO` |
+| Mensajes | `mensaje`, `enviar`, `recibir` | `MENSAJE`, `ENVIAR`, `RECIBIR` |
+| Utilidades | `estadisticas`, `ejemplo`, `ayuda`, `tokens`, `limpiar`, `salir` | `ESTADISTICAS`, `EJEMPLO`, `AYUDA`, `TOKENS`, `LIMPIAR`, `SALIR` |
+
+| Tipo | Patrón | Ejemplo |
+|---|---|---|
+| `ID` | `[A-Za-z_][A-Za-z0-9_]*` | `editor_2` |
+| `NOMBRE_ARCHIVO` | `[A-Za-z0-9_-]+\.[A-Za-z0-9]+` | `notas.txt` |
+| `NUMERO` | `[0-9]+` | `128` |
+| `CADENA` | Texto entre comillas dobles | `"hola mundo"` |
+| `IGUAL` | `=` | `cpu=8` |
+| `FIN` | Fin del texto | automático |
+| `ERROR` | Carácter inválido o cadena sin cerrar | `@` |
+
+### A.3 Gramática
+
+```ebnf
+entrada            ::= [comando] [comentario] FIN
+
+comando            ::= crear | listar | consultar | finalizar | planificar
+                     | estadisticas | concurrencia | mensaje | memoria
+                     | archivo | ejemplo | ayuda | tokens | limpiar | salir
+
+crear              ::= CREAR PROCESO ID atributo { atributo }
+atributo           ::= LLEGADA IGUAL NUM | CPU IGUAL NUM
+                     | PRIORIDAD IGUAL NUM | MEM IGUAL NUM
+
+listar             ::= LISTAR PROCESOS
+consultar          ::= CONSULTAR PROCESO NUM
+finalizar          ::= FINALIZAR PROCESO NUM
+planificar         ::= PLANIFICAR (FCFS | SJF | RR [QUANTUM IGUAL NUM])
+concurrencia       ::= CONCURRENCIA (SIN_LOCK | CON_LOCK | SEMAFORO)
+mensaje            ::= MENSAJE (ENVIAR CADENA | RECIBIR)
+memoria            ::= MEMORIA [ESTADO | ASIGNAR NUM NUM | LIBERAR NUM]
+archivo            ::= ARCHIVO (CREAR NOMBRE_ARCHIVO [CADENA] | LISTAR
+                     | LEER NOMBRE_ARCHIVO
+                     | MODIFICAR NOMBRE_ARCHIVO CADENA
+                     | ELIMINAR NOMBRE_ARCHIVO)
+ejemplo            ::= EJEMPLO
+ayuda              ::= AYUDA [palabra]
+tokens             ::= TOKENS { cualquier_token }
+limpiar            ::= LIMPIAR
+salir              ::= SALIR
+```
