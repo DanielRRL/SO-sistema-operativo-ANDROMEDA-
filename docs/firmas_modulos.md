@@ -135,10 +135,10 @@ Responsable: C.
 | `despachar` | `despachar(orden: Orden) -> str` | Ejecuta la orden y devuelve el texto para imprimir. |
 | `ayuda` | `ayuda(palabra: str \| None = None) -> str` | Ayuda general o detalle de una palabra. |
 
-Implementacion T3.6: `ayuda` muestra el listado general o la definicion y
-ejemplo de una palabra. `despachar` resuelve `ayuda` y `tokens`; este ultimo
-muestra la tabla de terminales sin argumentos y tokeniza el texto indicado.
-La conexion del resto de comandos con sus modulos corresponde a T4.1.
+Implementacion T3.6 y T4.1: `ayuda` muestra el listado general o la definicion y
+ejemplo de una palabra. `despachar` resuelve todos los comandos conectando
+procesos, planificadores, estadisticas, memoria, archivos, concurrencia y
+mensajes.
 
 ## 7. `procesos.py`
 
@@ -177,8 +177,8 @@ Implementado en T3.1 y validado en T4.2: valida nombre, pid, llegada, cpu,
 prioridad y memoria; registra cada proceso, asigna pid automatico, reserva
 memoria y deja el proceso en `LISTO` o `RECHAZADO`. `finalizar_proceso` libera
 la memoria y solo acepta procesos `LISTO` o `EJECUTANDO`. `cargar_ejemplo`
-reinicia el registro y carga P1-P4. La conexion del comando de consola se
-completa en T4.1.
+reinicia el registro y carga P1-P4. La conexion del comando de consola quedo
+integrada en T4.1.
 
 ## 8. `planificador.py`
 
@@ -350,8 +350,8 @@ Implementado en T3.10 con `queue.Queue`: la cola es FIFO y segura entre hilos.
 
 ## 14. `main.py`
 
-Responsable: C. Integrado con T2.1, T3.6, T3.9 y T4.3; el despacho del resto de
-comandos se completa en T4.1.
+Responsable: C. Integrado con T2.1, T3.6, T3.9, T4.1 y T4.3; el despachador
+conecta todos los comandos.
 
 | Simbolo | Firma | Uso actual |
 |---|---|---|

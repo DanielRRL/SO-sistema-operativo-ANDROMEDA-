@@ -169,8 +169,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Entrada:** `Orden`.
 - **Salida:** `str` con `[OK]` o `[ERROR]`.
 - **Depende de:** todos los módulos de simulación.
-- **Estado:** T3.6 implementa `ayuda` y `tokens`; el despacho del resto de
-  comandos se completa en T4.1.
+- **Estado:** T4.1 implementa el despachador completo de todos los comandos;
+  T3.6 aporta `ayuda` y `tokens`.
 
 ### 5.5 `main.py`
 
@@ -181,8 +181,8 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Características:** prompt fijo, `salir`, `limpiar`, `Ctrl+C`, `Ctrl+D`,
   `ayuda`, `tokens` y modo `--script`.
 - **Estado:** T2.1 mantiene el bucle, T3.6 conecta `ayuda`/`tokens`, T3.9
-  integra el parser y T4.3 agrega el modo `--script`. El despacho del resto de
-  comandos se completa en T4.1.
+  integra el parser, T4.1 conecta el despachador completo y T4.3 agrega el modo
+  `--script`.
 
 ### 5.6 `procesos.py`
 
@@ -192,7 +192,7 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
 - **Salida:** `Proceso` o lista de procesos.
 - **Depende de:** `memoria.py` para reservar y liberar.
 - **Estado:** implementado en T3.1 y validado en T4.2; reserva memoria al crear
-  y la libera al finalizar. La conexion del comando de consola queda para T4.1.
+  y la libera al finalizar. La conexión con la consola quedó integrada en T4.1.
 
 ### 5.7 `planificador.py`
 
@@ -264,6 +264,7 @@ errores de validación de los módulos se convierten en `[ERROR] ...`.
   y otros bordes (T5.2).
 - `pruebas/test_parser.py`: cubre órdenes válidas, errores y sesión de demo.
 - `pruebas/test_mensajes.py`: cubre la cola FIFO y productor/consumidor.
+- `pruebas/test_errores.py`: cubre los casos de error de la consola (T5.3).
 - `pruebas/demo.txt`: guion de demostración ejecutable con `--script` (T4.3).
 - `docs/`: contrato, firmas, terminales, pseudocódigo, diagramas y este
   documento.
@@ -311,9 +312,10 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 
 - `tokens.py` y `lexer.py` implementados y probados.
 - `parser.py` implementado con gramática T1.2, `Orden` y `ErrorSintaxis` (T3.9).
-- `main.py` integra parser, `ayuda`, `tokens` y modo `--script` (T3.6/T3.9/T4.3).
+- `main.py` integra parser, despachador, `ayuda`, `tokens` y modo `--script`
+  (T3.6/T3.9/T4.1/T4.3).
 - `mensajes.py` implementado con cola FIFO segura entre hilos (T3.10).
-- `consola.py` implementa `ayuda` y `tokens` (T3.6).
+- `consola.py` implementa el despachador completo de todos los comandos (T4.1).
 - `memoria.py` implementado con reserva, liberación y estado (T3.7).
 - `archivos.py` implementado con sandbox en `carpeta_pruebas/` (T3.8).
 - `procesos.py` implementado con ciclo de vida y memoria (T3.1).
@@ -323,17 +325,21 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
   (T5.2).
 - `estadisticas.py` implementado con promedios y tabla (T3.4).
 - `hilos_sync.py` implementado con hilos reales.
+- Pruebas del lexer T5.1 y errores de consola T5.3.
+- Evidencias Linux de T3.12 en `docs/evidencias/linux/`.
+- README T6.5 y anexo léxico T6.6.
 - Diagramas de arquitectura y flujo de consola de T1.4.
 - Contrato T1.2, firmas T1.3, terminales T1.1 y pseudocódigo T1.5.
-- 146 pruebas unitarias de lexer, parser, hilos, memoria, archivos, procesos,
-  planificadores, estadísticas, mensajes, ayuda y tokens.
+- 155 pruebas unitarias de lexer, parser, hilos, memoria, archivos, procesos,
+  planificadores, estadísticas, mensajes, ayuda, tokens y errores.
 
-### 8.2 Pendiente de integración
+### 8.2 Pendiente de cierre
 
-- Despachador de T4.1.
-- Conexión de procesos, planificador, estadísticas, memoria, archivos,
-  concurrencia y mensajes con la consola.
-- Pruebas de extremo a extremo.
+- Recorrido completo de la sesión de ejemplo (T4.4).
+- Pruebas de extremo a extremo (T5.4).
+- Revisión cruzada (T5.5) y versión congelada (T5.6).
+- Documento final, diagramas finales e informe (T6.1–T6.4).
+- Ensayo y sustentación (T7).
 
 ### 8.3 Riesgos
 
@@ -341,7 +347,7 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 |---|---|
 | Diferencias entre T1.1 y T1.2 | T1.2 es la sintaxis canónica; T1.1 queda como propuesta. |
 | Módulos que no encajan al integrar | Firmas cerradas en T1.3 y stubs importables. |
-| Pérdida de tiempo en rebases | C ya está integrado; cerrar T4.1. |
+| Pérdida de tiempo en rebases | C y T4.1 ya están integrados; cerrar T4.4. |
 | Errores en la demo | `pruebas/demo.txt`, capturas y ensayos. |
 | Archivos fuera del sandbox | Validación de rutas en `archivos.py`. |
 
@@ -356,16 +362,18 @@ python3 main.py
 
 Validaciones realizadas sobre `main`:
 
-- 146 pruebas unitarias de lexer, parser, hilos, memoria, archivos, procesos,
-  planificadores, estadísticas, mensajes, ayuda y tokens: correctas.
+- 155 pruebas unitarias de lexer, parser, hilos, memoria, archivos, procesos,
+  planificadores, estadísticas, mensajes, ayuda, tokens y errores: correctas.
 - Integración memoria-procesos validada: reserva, rechazo por capacidad y
   liberación al finalizar.
 - Casos borde de planificación verificados: un proceso, CPU ociosa, quantum 1,
   quantum mayor que la CPU y llegada al borde del quantum.
-- Parser T3.9, mensajes T3.10 y modo `--script` T4.3 validados.
+- Parser T3.9, mensajes T3.10, despachador T4.1 y modo `--script` T4.3 validados.
+- Pruebas T5.1 y T5.3; README T6.5 y anexo léxico T6.6 integrados.
 - Importación de todos los módulos: correcta.
-- Consola con `ayuda planificar`, `tokens crear proceso editor llegada=0` y
-  `salir`: correcta.
+- Consola con `ayuda planificar`, `tokens crear proceso editor llegada=0`,
+  `crear proceso`, `listar procesos`, `planificar`, `estadisticas` y `salir`:
+  correcta.
 - Diagramas y referencias de T1.4: presentes.
 - Valores de T1.5: coinciden con el contrato T1.2.
 

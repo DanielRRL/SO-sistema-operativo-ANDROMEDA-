@@ -140,10 +140,9 @@ responsables (A, B, C, D). El historial de git y el plan de trabajo
 - **Utilidades:** `ayuda`, `tokens`, `ejemplo`, `limpiar`, `salir` y modo
   `--script`.
 
-> **Estado del árbol de trabajo:** la rama actual tiene cambios locales sin
-> confirmar en `consola.py` y `main.py` (conexión del despachador y manejo de
-> `salir`/`limpiar`/`tokens`) y un archivo nuevo `pruebas/test_errores.py`
-> (T5.3, casos de error de la consola).
+> **Estado actual:** T4.1 ya está integrado en `main`; el despachador conecta
+> todos los comandos y las pruebas de error T5.3 están integradas. La suite
+> completa suma 155 pruebas.
 
 ---
 
@@ -803,9 +802,12 @@ concurrencia, mensajes, archivos y errores de sintaxis en una sola sesión.
 
 ### Pendientes de documentación y cierre
 
+- Cerrar el recorrido completo (T4.4) y las pruebas de extremo a extremo (T5.4).
+- Revisión cruzada (T5.5) y versión congelada (T5.6).
 - Consolidar el documento de diseño final (T6.1).
 - Actualizar el diagrama modular con lo realmente implementado (T6.2).
-- Evidencias de Linux y comparación simulación vs Linux (T6.3).
+- Completar la comparación simulación vs Linux (T6.3); las evidencias ya están
+  en `docs/evidencias/linux/`.
 - Informe final con pruebas, resultados y conclusiones (T6.4).
 - Guion, ensayos y plan B de la sustentación (T7.1–T7.3).
 
