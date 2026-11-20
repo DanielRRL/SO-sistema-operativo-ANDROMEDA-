@@ -1,167 +1,79 @@
-# Diagrama modular y de flujo
+# Diagrama modular y de flujo (versión final)
 
-- **Tarea:** T1.4
-- **Fase:** 1. Diseno
+- **Tareas:** T1.4 (diseño) y T6.2 (actualización con lo implementado)
 - **Responsable:** D
-- **Depende de:** T1.1 (B), T1.3 (todos)
-- **Estado:** v1 (diseno). En T6.2 se actualiza con lo realmente implementado.
-
-Los nombres de modulos y funciones salen de `docs/firmas_modulos.md`.
+- **Versión documentada:** `main`, commit `839b770`
+- Las dependencias de este documento se verificaron contra los `import` del código.
 
 ## 1. Diagrama modular
 
 ![Diagrama modular](diagramas/modular.png)
 
-Version vectorial: `diagramas/modular.svg`. El bloque Mermaid de abajo es el mismo diagrama en codigo, util para editarlo.
+Versión vectorial: `diagramas/modular.svg`.
 
-Cada caja es un archivo `.py`. Las flechas indican "usa a".
+`main.py` coordina el flujo: lee la línea, llama al lexer y al parser, y entrega la orden
+a `consola.py`, que ejecuta el módulo correspondiente y devuelve el texto de salida.
 
-```mermaid
-flowchart TD
-    U([Usuario]) --> MAIN
+### Dependencias reales entre módulos
 
-    subgraph ENTRADA [Capa de entrada]
-        MAIN["main.py<br/>bucle de lectura, salir, limpiar,<br/>modo --script"]
-        TOK["tokens.py<br/>tabla de terminales"]
-        LEX["lexer.py<br/>tokenizar()"]
-        PAR["parser.py<br/>parsear() -> Orden"]
-    end
+| Módulo | Importa a |
+|---|---|
+| `main.py` | `lexer`, `parser`, `consola` |
+| `consola.py` | `procesos`, `planificador`, `estadisticas`, `memoria`, `archivos`, `hilos_sync`, `mensajes`, `lexer`, `parser`, `tokens` |
+| `parser.py` | `lexer` |
+| `lexer.py` | `tokens` |
+| `procesos.py` | `memoria`, `tokens` |
+| `planificador.py` | `procesos` |
+| `estadisticas.py` | `planificador` |
+| `archivos.py` | `tokens` |
+| `tokens.py`, `memoria.py`, `hilos_sync.py`, `mensajes.py` | (ninguno del proyecto) |
 
-    subgraph CONTROL [Capa de control]
-        CON["consola.py<br/>despachar(), ayuda()"]
-    end
+## 2. Descripción de cada módulo
 
-    subgraph NUCLEO [Nucleo del simulador]
-        PRO["procesos.py<br/>Proceso, crear, listar,<br/>consultar, finalizar"]
-        PLA["planificador.py<br/>fcfs, sjf, rr"]
-        EST["estadisticas.py<br/>retorno, espera, promedios"]
-        MEM["memoria.py<br/>reservar, liberar<br/>(1024 MB)"]
-    end
-
-    subgraph RECURSOS [Recursos y comunicacion]
-        ARC["archivos.py<br/>solo dentro de carpeta_pruebas/"]
-        HIL["hilos_sync.py<br/>sin_lock, con_lock, semaforo"]
-        MSG["mensajes.py<br/>cola FIFO"]
-    end
-
-    MAIN --> LEX
-    LEX --> TOK
-    MAIN --> PAR
-    PAR --> LEX
-    MAIN --> CON
-    CON --> TOK
-    CON --> PRO
-    CON --> PLA
-    CON --> EST
-    CON --> MEM
-    CON --> ARC
-    CON --> HIL
-    CON --> MSG
-    PRO --> MEM
-    PLA --> PRO
-    EST --> PLA
-```
-
-Version en texto, por si Mermaid no se renderiza:
-
-```text
-                         Usuario
-                            |
-                         main.py  ------------------ (modo --script)
-                            |
-              +-------------+-------------+
-              |                           |
-          lexer.py  <--- tokens.py     parser.py
-              |__________________________|
-                            |  Orden
-                        consola.py  (despachar / ayuda)
-                            |
-   +--------+--------+------+------+---------+---------+
-   |        |        |      |      |         |         |
-procesos  planif.  estad.  memoria archivos hilos_sync mensajes
-   |  \       |       |
-   |   \      v       v
-   |    +-> procesos  planificador
-   v
-memoria
-```
-
-## 2. Descripcion de cada modulo
-
-| Modulo | Responsable | Funcion principal | Entra | Sale |
+| Módulo | Responsable | Función principal | Entra | Sale |
 |---|---|---|---|---|
-| `main.py` | C | Bucle de lectura; atiende `salir`, `limpiar` y `--script`. | Texto del usuario. | Texto en pantalla. |
-| `tokens.py` | B | Tabla de palabras reservadas y terminales. | - | Definiciones. |
-| `lexer.py` | B | Convierte una linea en tokens. | `str` | `list[Token]` terminada en `FIN`. |
-| `parser.py` | C | Valida la gramatica y arma la orden. | `list[Token]` | `Orden` o `ValueError`. |
-| `consola.py` | C | Despachador: elige el modulo segun la orden. | `Orden` | `str` con `[OK]` o `[ERROR]`. |
-| `procesos.py` | A | Registro y ciclo de vida de procesos. | Datos del proceso. | `Proceso`. |
+| `main.py` | C | Bucle de lectura; atiende `salir`, `limpiar`, `tokens` y el modo `--script`. | Texto del usuario o archivo. | Texto en pantalla. |
+| `tokens.py` | B | Tabla de palabras reservadas y terminales. | — | Definiciones. |
+| `lexer.py` | B | Convierte una línea en tokens, con línea y columna. | `str` | `list[Token]` terminada en `FIN`. |
+| `parser.py` | C | Valida la gramática y arma la orden. | `list[Token]` | `Orden` o `ErrorSintaxis`. |
+| `consola.py` | C | Despachador: elige el módulo según el comando y da formato a la salida. | `Orden` | `str` con `[OK]` o `[ERROR]`. |
+| `procesos.py` | A | Registro y ciclo de vida de procesos; reserva memoria al crear. | Datos del proceso. | `Proceso`. |
 | `planificador.py` | A | FCFS, SJF no expulsivo y Round Robin. | `list[Proceso]` | `ResultadoPlanificacion` (Gantt y tiempos). |
-| `estadisticas.py` | A | Finalizacion, retorno, espera y promedios. | `ResultadoPlanificacion` | Tabla de texto. |
-| `memoria.py` | B | Reserva y liberacion con tope de 1024 MB. | `pid`, MB. | `bool`, MB liberados, estado. |
+| `estadisticas.py` | A | Finalización, retorno, espera y promedios. | `ResultadoPlanificacion` | Tabla de texto. |
+| `memoria.py` | B | Reserva y liberación con tope de 1024 MB. | `pid`, MB. | `bool`, MB liberados, estado. |
 | `archivos.py` | B | CRUD de archivos confinado a `carpeta_pruebas/`. | Nombre y contenido. | `ArchivoInfo`, texto. |
-| `hilos_sync.py` | D | Demostracion de condicion de carrera, Lock y Semaphore. | Modo, hilos, iteraciones. | `ResultadoConcurrencia`. |
+| `hilos_sync.py` | D | Demostración de condición de carrera, Lock y Semaphore. | Modo, hilos, iteraciones. | `ResultadoConcurrencia`. |
 | `mensajes.py` | C | Cola FIFO de mensajes. | Texto. | Mensaje o `None`. |
 
 ## 3. Diagrama de flujo de la consola
 
 ![Diagrama de flujo de la consola](diagramas/flujo_consola.png)
 
-Version vectorial: `diagramas/flujo_consola.svg`. El bloque Mermaid de abajo es el mismo flujo en codigo.
-
-```mermaid
-flowchart TD
-    A([Inicio]) --> B[Mostrar prompt simulador>]
-    B --> C{Entrada}
-    C -- "Ctrl+C" --> C1[Avisar: usa salir] --> B
-    C -- "Ctrl+D / fin" --> Z([Fin])
-    C -- linea --> D{Linea vacia?}
-    D -- si --> B
-    D -- no --> E{salir?}
-    E -- si --> E1["[OK] Hasta luego"] --> Z
-    E -- no --> F{limpiar?}
-    F -- si --> F1[Limpiar pantalla] --> B
-    F -- no --> G["lexer.tokenizar(linea)"]
-    G --> H{Hay token ERROR?}
-    H -- si --> H1["[ERROR] caracter o cadena invalida<br/>con la columna"] --> B
-    H -- no --> I["parser.parsear(tokens)"]
-    I --> J{Gramatica valida?}
-    J -- no --> J1["[ERROR] mostrar uso correcto"] --> B
-    J -- si --> K["consola.despachar(orden)"]
-    K --> L{Comando}
-    L -- "crear / listar / consultar / finalizar" --> M1[procesos.py]
-    L -- "planificar / estadisticas" --> M2[planificador.py y estadisticas.py]
-    L -- memoria --> M3[memoria.py]
-    L -- archivo --> M4[archivos.py]
-    L -- "concurrencia" --> M5[hilos_sync.py]
-    L -- mensaje --> M6[mensajes.py]
-    L -- "ayuda / tokens / ejemplo" --> M7[ayuda, tabla de tokens, cargar_ejemplo]
-    M1 --> N
-    M2 --> N
-    M3 --> N
-    M4 --> N
-    M5 --> N
-    M6 --> N
-    M7 --> N
-    N["Salida: [OK] o [ERROR] + explicacion"] --> B
-```
+Versión vectorial: `diagramas/flujo_consola.svg`.
 
 Reglas del flujo:
 
-- Un error en cualquier etapa vuelve al prompt; el programa nunca se cae ni muestra un traceback.
-- Los modulos del nucleo lanzan `ValueError` en validaciones; `consola.py` los captura y los convierte en `[ERROR] ...`.
-- En modo `--script`, el mismo flujo se repite por cada linea del archivo, sin leer del teclado.
+- Una línea vacía se ignora y vuelve al prompt.
+- Primero se tokeniza y se parsea. Un error léxico (carácter no reconocido) o de gramática
+  muestra `[ERROR]` con la columna y el uso correcto, y vuelve al prompt.
+- `salir` termina el programa, `limpiar` limpia la pantalla y `tokens` muestra la tabla de
+  tokens de la línea. Estas tres órdenes las atiende `main.py`.
+- Cualquier otra orden pasa a `consola.despachar()`, que llama al módulo correspondiente.
+- Los errores de los módulos (pid inexistente, memoria insuficiente, ruta no permitida) los
+  captura `consola.py` y los convierte en `[ERROR]`. Nunca se muestra un traceback.
+- En modo `--script`, el mismo flujo se repite por cada línea del archivo; se ignoran las
+  líneas vacías y las que empiezan con `#`.
 
 ## 4. Flujos de datos relevantes
 
-**Crear un proceso con memoria (T4.2)**
+**Crear un proceso con memoria**
 
 ```text
-crear proceso P1 ... mem=200
+crear proceso P1 cpu=8 mem=200
   -> procesos.crear_proceso()
        -> memoria.reservar(pid, 200)
-            si True : estado LISTO       -> [OK] Proceso 1 creado.
-            si False: estado RECHAZADO   -> [ERROR] Memoria insuficiente.
+            True : estado LISTO       -> [OK] Proceso 1 creado en estado LISTO.
+            False: estado RECHAZADO   -> el proceso queda registrado como RECHAZADO
 finalizar proceso 1
   -> procesos.finalizar_proceso() -> memoria.liberar(pid)
 ```
@@ -170,10 +82,10 @@ finalizar proceso 1
 
 ```text
 planificar rr quantum=3
-  -> procesos.listar_procesos()
-  -> planificador.planificar(procesos, "RR", 3)   # Gantt + tiempos
-  -> estadisticas.calcular_estadisticas()
-  -> estadisticas.formatear_estadisticas()         # tabla en consola
+  -> procesos.listar_procesos()          # solo los que están LISTO
+  -> planificador.planificar(procesos, "RR", 3)   # Gantt y tiempos
+estadisticas
+  -> estadisticas.calcular_estadisticas() y formatear_estadisticas()
 ```
 
 **Concurrencia**
@@ -181,11 +93,15 @@ planificar rr quantum=3
 ```text
 concurrencia con_lock
   -> hilos_sync.ejecutar_concurrencia("con_lock")
-  -> hilos_sync.formatear_resultado()   # esperado vs obtenido
+  -> hilos_sync.formatear_resultado()    # esperado vs obtenido, [OK] o [ERROR]
 ```
 
-## 5. Pendientes para T6.2
+## 5. Cambios respecto al diseño inicial (T1.4)
 
-- Confirmar el nombre final del comando de concurrencia (`concurrencia` o `hilos`); ver `docs/terminales_sintaxis.md`.
-- Anotar si C agrego dependencias que no estan en este diagrama.
-- Revisar que `main.py` ya use `parser` y `consola` en lugar de solo imprimir tokens.
+- `main.py` ya integra el parser y el despachador; antes solo imprimía tokens.
+- La dependencia `procesos` → `memoria` ya está implementada (reserva al crear, liberación al
+  finalizar).
+- `tokens.py` también lo usan `consola.py` (ayuda), `procesos.py` y `archivos.py`, para
+  rechazar nombres que coinciden con palabras reservadas.
+- `consola.py` quedó como único punto de entrada a los módulos del núcleo y de los recursos.
+- El comando de concurrencia quedó como `concurrencia sin_lock|con_lock|semaforo`.
