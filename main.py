@@ -38,11 +38,7 @@ def ejecutar_linea(linea):
         texto = linea[len("tokens"):].strip()
         print(mostrar_tokens(texto or None))
         return True
-    if orden.comando == "ayuda":
-        print(despachar(orden))
-        return True
-
-    print(orden)
+    print(despachar(orden))
     return True
 
 
