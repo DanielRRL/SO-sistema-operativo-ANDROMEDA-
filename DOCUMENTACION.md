@@ -806,7 +806,9 @@ concurrencia, mensajes, archivos y errores de sintaxis en una sola sesión.
 - Congelación de la versión T5.6, a cargo de C.
 - Actualizar el diagrama modular con lo realmente implementado (T6.2).
 - Informe final con pruebas, resultados y conclusiones (T6.4).
-- Guion, ensayos y plan B de la sustentación (T7.1–T7.3).
+- Ensayos de la demo y sustentación (T7.1–T7.2); el guion está en
+  `docs/guion_demo.md`.
+- Plan B de la demo (T7.3).
 
 ---
 

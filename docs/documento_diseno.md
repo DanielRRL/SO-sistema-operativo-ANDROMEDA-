@@ -347,7 +347,8 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 - Congelación de la versión T5.6, a cargo de C.
 - Diagrama modular final T6.2 y plan B de la demo T7.3, a cargo de D.
 - Informe final T6.4, con dificultades aportadas por cada integrante.
-- Guion, ensayos y sustentación T7.1–T7.2.
+- Ensayos T7.1 y sustentación T7.2; el guion ya está en
+  [`docs/guion_demo.md`](./guion_demo.md).
 
 ### 8.3 Riesgos
 
@@ -403,6 +404,7 @@ Validaciones realizadas sobre `main`:
 - [`docs/comparacion_simulacion_linux.md`](./comparacion_simulacion_linux.md)
 - [`docs/evidencias/simulador/`](./evidencias/simulador/)
 - [`docs/anexo_especificacion_lexica.md`](./anexo_especificacion_lexica.md)
+- [`docs/guion_demo.md`](./guion_demo.md)
 
 ## Anexo A — Especificación léxica (T6.6)
 
