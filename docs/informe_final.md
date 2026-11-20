@@ -78,7 +78,7 @@ mensaje `[ERROR]` con el motivo y el uso correcto:
 | Revisión | Estado | Resultado |
 |---|---|---|
 | A revisa a B | Aprobada | Sin defectos bloqueantes (`docs/revision_cruzada_A_B.md`) |
-| B revisa a C | Aprobada | Revisó `parser.py`, `consola.py` y `main.py`; 155 pruebas y demo correctas, sin defectos bloqueantes. Observación: actualizar una nota del README sobre el despacho de comandos |
+| B revisa a C | Aprobada | Revisó `parser.py`, `consola.py` y `main.py`; 155 pruebas y demo correctas, sin defectos bloqueantes. Observación: actualizar una nota del README sobre el despacho de comandos (resuelta). |
 | C revisa a D | _Pendiente de reporte_ | |
 | D revisa a A | _Pendiente de reporte_ | |
 

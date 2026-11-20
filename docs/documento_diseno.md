@@ -327,6 +327,9 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 - `hilos_sync.py` implementado con hilos reales.
 - Pruebas del lexer T5.1 y errores de consola T5.3.
 - Evidencias Linux de T3.12 en `docs/evidencias/linux/`.
+- Diagrama modular final actualizado (T6.2) en `docs/diagrama_modular.md`.
+- Informe final T6.4 en `docs/informe_final.md`.
+- Guion de demo T7.1 en `docs/guion_demo.md`; faltan los ensayos.
 - Recorrido completo T4.4 validado y documentado en
   [`docs/validacion_t4.4.md`](./validacion_t4.4.md).
 - Pruebas de extremo a extremo T5.4 y capturas del simulador en
@@ -343,12 +346,10 @@ están en [`docs/firmas_modulos.md`](./firmas_modulos.md).
 
 ### 8.2 Pendiente de cierre
 
-- Revisiones B → C, C → D y D → A de T5.5.
+- Revisiones C → D y D → A de T5.5; A → B y B → C ya están aprobadas.
 - Congelación de la versión T5.6, a cargo de C.
-- Diagrama modular final T6.2 y plan B de la demo T7.3, a cargo de D.
-- Informe final T6.4, con dificultades aportadas por cada integrante.
-- Ensayos T7.1 y sustentación T7.2; el guion ya está en
-  [`docs/guion_demo.md`](./guion_demo.md).
+- Ensayos T7.1 y sustentación T7.2.
+- Plan B de la demo T7.3, a cargo de D.
 
 ### 8.3 Riesgos
 
@@ -405,6 +406,7 @@ Validaciones realizadas sobre `main`:
 - [`docs/evidencias/simulador/`](./evidencias/simulador/)
 - [`docs/anexo_especificacion_lexica.md`](./anexo_especificacion_lexica.md)
 - [`docs/guion_demo.md`](./guion_demo.md)
+- [`docs/informe_final.md`](./informe_final.md)
 
 ## Anexo A — Especificación léxica (T6.6)
 

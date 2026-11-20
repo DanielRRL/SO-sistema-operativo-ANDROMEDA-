@@ -2,9 +2,8 @@
 
 Simulador didáctico de un sistema operativo con interfaz por línea de comandos,
 desarrollado en Python puro para Linux. El usuario escribe una orden, el lexer la
-convierte en tokens y el parser valida la gramática. `ayuda` y `tokens` muestran
-su salida correspondiente; los demás comandos se representan como órdenes
-estructuradas mientras se completa su integración con el despachador.
+convierte en tokens, el parser valida la gramática y el despachador ejecuta la
+acción correspondiente en el módulo del simulador.
 
 ## Requisitos
 
@@ -118,15 +117,14 @@ simulador> tokens crear proceso @x
 La salida muestra el tipo, el lexema y su posición. Los caracteres no
 reconocidos aparecen con el tipo `ERROR`. Usa `salir` para cerrar el simulador.
 
-Para recorrer la sesión de ejemplo y observar el análisis de las órdenes:
+Para recorrer la sesión de ejemplo completa:
 
 ```bash
 python3 main.py --script pruebas/demo.txt
 ```
 
-En la versión actual, los comandos distintos de `ayuda`, `tokens`, `limpiar` y
-`salir` se analizan y muestran como órdenes estructuradas; su ejecución completa
-depende de conectar el despachador con los módulos.
+El despachador ya conecta todos los comandos con sus módulos: procesos, memoria,
+planificadores, estadísticas, archivos, concurrencia y mensajes.
 
 La sintaxis completa, los terminales, sus patrones y la gramática se encuentran
 en el [anexo de especificación léxica](docs/anexo_especificacion_lexica.md).
@@ -161,7 +159,7 @@ python3 -m unittest discover -s pruebas -v
 ```
 
 La suite incluye más de 25 entradas válidas y más de 25 entradas léxicamente
-inválidas para el lexer.
+inválidas para el lexer. Actualmente se ejecutan 155 pruebas.
 
 ## Estructura del proyecto
 
